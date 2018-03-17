@@ -13,6 +13,9 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
 
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -34,7 +37,6 @@ allprojects {
 
 
 subprojects { subp ->
-    println subp.group + '' + subp.name + ' ' + subp.version
     if (subp.group.toString().startsWith(rootProject.name)) {
         subp.group = 'bamboo.sample'
     }
@@ -69,7 +71,7 @@ subprojects { subp ->
                         from android.sourceSets.main.java.sourceFiles
                     }
                     artifacts {
-//                            archives generateandroidJavadocsJar
+                        archives generateandroidJavadocsJar
                         archives generateandroidSourcesJar
                     }
                 }

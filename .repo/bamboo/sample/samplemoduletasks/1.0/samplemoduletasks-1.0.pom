@@ -8,12 +8,6 @@
   <packaging>aar</packaging>
   <dependencies>
     <dependency>
-      <groupId>bamboo.sample</groupId>
-      <artifactId>sampleouter</artifactId>
-      <version>1.0</version>
-      <scope>compile</scope>
-    </dependency>
-    <dependency>
       <groupId>com.android.support</groupId>
       <artifactId>appcompat-v7</artifactId>
       <version>26.1.0</version>
@@ -22,6 +16,12 @@
     <dependency>
       <groupId>bamboo.component</groupId>
       <artifactId>stitcher</artifactId>
+      <version>1.0</version>
+      <scope>compile</scope>
+    </dependency>
+    <dependency>
+      <groupId>bamboo.sample</groupId>
+      <artifactId>samplerouter</artifactId>
       <version>1.0</version>
       <scope>compile</scope>
     </dependency>

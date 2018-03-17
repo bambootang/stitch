@@ -4,7 +4,6 @@ package bamboo.component;
 import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
-import android.support.annotation.VisibleForTesting;
 
 import java.util.Collection;
 
@@ -28,7 +27,6 @@ public final class StitcherHelper {
     private StitcherHelper() {
     }
 
-    @VisibleForTesting
     static void setComponentLifeRegistry(ComponentLifeRegistry componentLifeRegistry) {
         StitcherHelper.componentLifeRegistry = componentLifeRegistry;
     }

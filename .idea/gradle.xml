@@ -11,7 +11,7 @@
             <option value="$PROJECT_DIR$/sampleapp" />
             <option value="$PROJECT_DIR$/samplemoduleaccount" />
             <option value="$PROJECT_DIR$/samplemoduletasks" />
-            <option value="$PROJECT_DIR$/sampleouter" />
+            <option value="$PROJECT_DIR$/samplerouter" />
             <option value="$PROJECT_DIR$/stitcher" />
           </set>
         </option>

@@ -13,12 +13,12 @@ import bamboo.component.datarouter.ComponentRouterRegistry;
  *
  * 像下面这样
  *
- * <application>
+ * &#x3C;application&#x3E;
  *     ...
- *      <meta-data
+ *      &#x3C;meta-data
  *              android:name="bamboo.sample.tasks.component.TasksComponentApp"
- *              android:value="ComponentApplication" />
- * </application>
+ *              android:value="ComponentApplication" /&#x3E;
+ * &#x3C;/application&#x3E;
  *
  * 其中ComponentApplication作为value，你的自定义的类TasksComponentApp作为name
  *

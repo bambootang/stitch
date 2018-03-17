@@ -14,5 +14,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
     implementation 'bamboo.component:stitcher:1.0'
 
-    api project(":sampleouter")
+    implementation project(":samplerouter")
 }

@@ -34,3 +34,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
 }
+
+apply from: "${rootProject.rootDir}/gradle/android_publish.gradle"

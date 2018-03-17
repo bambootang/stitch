@@ -7,7 +7,7 @@
       <module fileurl="file://$PROJECT_DIR$/sampleapp/sampleapp.iml" filepath="$PROJECT_DIR$/sampleapp/sampleapp.iml" />
       <module fileurl="file://$PROJECT_DIR$/samplemoduleaccount/samplemoduleaccount.iml" filepath="$PROJECT_DIR$/samplemoduleaccount/samplemoduleaccount.iml" />
       <module fileurl="file://$PROJECT_DIR$/samplemoduletasks/samplemoduletasks.iml" filepath="$PROJECT_DIR$/samplemoduletasks/samplemoduletasks.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sampleouter/sampleouter.iml" filepath="$PROJECT_DIR$/sampleouter/sampleouter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/samplerouter/samplerouter.iml" filepath="$PROJECT_DIR$/samplerouter/samplerouter.iml" />
       <module fileurl="file://$PROJECT_DIR$/stitcher/stitcher.iml" filepath="$PROJECT_DIR$/stitcher/stitcher.iml" />
       <module fileurl="file://$PROJECT_DIR$/testrouter/testrouter.iml" filepath="$PROJECT_DIR$/testrouter/testrouter.iml" />
     </modules>
