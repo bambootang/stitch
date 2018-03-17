@@ -1,0 +1,15 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="bamboo.sample.account">
+
+    <application>
+
+        <activity
+            android:name=".ui.AccountInfoActivity"
+            android:label="用户信息" />
+
+        <meta-data
+            android:name="bamboo.sample.account.component.AccountComponentApp"
+            android:value="ComponentApplication" />
+
+    </application>
+</manifest>

@@ -1,0 +1,17 @@
+def findProperty(String propertiesFile, String propertyName) {
+    if (propertiesFile != null) {
+        java.util.Properties properties = new java.util.Properties()
+        InputStream inputStream = new File(propertiesFile).newDataInputStream()
+        properties.load(inputStream)
+        def propertyValue = properties.getProperty(propertyName)
+        return propertyValue == null ? "" : propertyValue
+    }
+    return ""
+}
+
+String[] includes = findProperty(rootDir.absolutePath+"/local.properties", "include").split(",")
+
+
+includes.each {
+    include it
+}

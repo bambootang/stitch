@@ -1,0 +1,101 @@
+def findProperty(String propertiesFile, String propertyName) {
+    if (propertiesFile != null) {
+        java.util.Properties properties = new java.util.Properties()
+        InputStream inputStream = new File(propertiesFile).newDataInputStream()
+        properties.load(inputStream)
+        def propertyValue = properties.getProperty(propertyName)
+        return propertyValue == null ? "" : propertyValue
+    }
+    return ""
+}
+
+def propertyCheck(String value, String defaultValue) {
+    return value == null ? defaultValue : value
+}
+
+def isApp = findProperty(rootDir.absolutePath + '/local.properties', "product").split(",").contains(name)
+
+ext {
+    isApplication = isApp
+    versionName = rootProject.ext.versionName
+    versionCode = rootProject.ext.versionCode
+    try {
+        applicationId = project.ext.applicationId
+    } catch (Exception e) {
+        applicationId = "bamboo.sample";
+    }
+}
+
+if (isApp) {
+    apply plugin: 'com.android.application'
+} else {
+    apply plugin: 'com.android.library'
+
+    if (project.version == "undefind") {
+        version = "1.0"
+    }
+}
+
+android {
+    compileSdkVersion rootProject.compileSdkVersion
+    buildToolsVersion rootProject.buildToolsVersion
+
+    try {
+        def prefix = project.ext.resourcePrefix
+        resourcePrefix prefix
+    } catch (Exception e) {
+    }
+
+
+    signingConfigs {
+        signed {
+            storeFile file("../gradle/samplekey.ks")
+            storePassword "samplekey"
+            keyAlias "test"
+            keyPassword "samplekey"
+        }
+    }
+
+    defaultConfig {
+        minSdkVersion rootProject.minSdkVersion
+        targetSdkVersion rootProject.targetSdkVersion
+        if (isApp) {
+            applicationId project.ext.applicationId
+        }
+        versionCode project.ext.versionCode
+        versionName project.ext.versionName
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+
+    }
+    buildTypes {
+        debug {
+            signingConfig signingConfigs.signed
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        release {
+            signingConfig signingConfigs.signed
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+
+    configurations.all {
+//        resolutionStrategy.force 'com.google.code.findbugs:jsr305:3.0.0'
+        //刷新频率
+        resolutionStrategy.cacheChangingModulesFor 1, 'seconds'
+    }
+
+    if (isApp) {
+        flavorDimensions "runTest"
+        productFlavors {
+            runTest {
+                dimension "runTest"
+                minSdkVersion 21
+            }
+        }
+    }
+}
+
+
