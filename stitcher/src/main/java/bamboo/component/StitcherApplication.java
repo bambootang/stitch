@@ -31,6 +31,7 @@ public class StitcherApplication extends Application {
 
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
+        StitcherHelper.onTrimMemory(level);
     }
 
     public void onLowMemory() {
