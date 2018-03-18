@@ -47,26 +47,26 @@ public abstract class ComponentApplication {
 ```
 ComponentApplication是组件生命周期的代理类，代理了Application的常用关键方法。如果组件在App启动时进行某些初始化或需要监听生命周期，通过ComponentApplication即可实现。
 ##### 2. 在Module的AndroidManifest.xml中进行配置
-```
-    <application>
-        ...
-        <meta-data
-            android:name="bamboo.sample.account.component.AccountComponentApp"
-            android:value="ComponentApplication" />
-    </application>
+```xml
+<application>
+    ...
+    <meta-data
+        android:name="bamboo.sample.account.component.AccountComponentApp"
+        android:value="ComponentApplication" />
+</application>
 ```
 > 特别要注意：meta-data的value是ComponentApplication，name才是我们module的代理Application类。不要搞反了。
 ##### 3. 主工程里面的自定义Application修改
 在主工程Application里面我们需要主动调用组件的代理Application的方法，[stitcher](https://github.com/bambootang/stitcher)提供了两种方式：
 
 **1.  直接继承StitcherApplication**
-```
+```java
 public class MainApplication extends StitcherApplication {
 }
 ```
 **2.  通过StitcherHelper调用组件的生命周期。**
 参考StitcherApplication。
-```
+```java
 public class StitcherApplication{
     public void onCreate() {
         super.onCreate();
@@ -113,7 +113,7 @@ public class StitcherApplication{
 ##### 1. 创建一个Module：sampleouter
 ##### 2. 修改sampleouter的build.gradle文件，在里面加入以下代码：
 这一步的目的是为了把所有Module的projectDir的router文件夹都加入到sampleouter的源码文件夹中，这样一来，我们就能在自己的Module的router文件夹内管理自己对外公开的接口以及页面。
-```
+```gradle
 android {
     ...
     sourceSets {
@@ -143,22 +143,22 @@ android {
 
 
 ##### 3.在Module中配置samplerouter的依赖
-```
-    implementation 'bamboo.component:stitcher:1.0'
-    implementation project(":samplerouter")
+```gradle
+implementation 'bamboo.component:stitcher:1.0'
+implementation project(":samplerouter")
 ```
 
 OK，sampleouter Module就配置好了，现在我们继续看页面交互要怎么实现。
 
 ### 页面交互
 我们在讲述组件的生命周期管理时，可能你已经看到了组件生命周期代理类内有一个方法
-```
-    //延迟初始化生命周期，用来注入页面以及数据交互接口
-    public void onCreateDelay(ComponentRouterRegistry routerRegistry, ActivityRouterRegistry activityRouterRegistry)；
+```java
+//延迟初始化生命周期，用来注入页面以及数据交互接口
+public void onCreateDelay(ComponentRouterRegistry routerRegistry, ActivityRouterRegistry activityRouterRegistry)；
 ```
 其中ActivityRouterRegistry就是我们进行页面交互的注册表，我们只需要将我们需要公开的页面注入到这里面就可以进行交互了。具体的实现步骤：
 ##### 1. 在router文件夹里创建一个TaskInfoPage.class并继承ActivityPage
-```
+```java
 package bamboo.sample.tasksrouter;
 
 //每个对外公开的页面都对应一个ActivityPage的子类
@@ -171,7 +171,7 @@ public class TaskInfoPage extends ActivityPage {
 }
 ```
 ##### 2. 创建一个TasksPageConsumer.class
-```
+```java
 public class TasksPageConsumer {
     //这个方法将会与TaskInfoPage进行连接。
     //所有的TaskInfoPage的页面交互请求都会最终调用到该方法中。
@@ -183,7 +183,7 @@ public class TasksPageConsumer {
 }
 ```
 ##### 3. 在Module的ComponentApplication实现类中注册
-```
+```java
 public class TasksComponentApp extends ComponentApplication {
 
     public void onCreateDelay(ComponentRouterRegistry routerRegistry, ActivityRouterRegistry activityRouterRegistry) {
@@ -192,7 +192,7 @@ public class TasksComponentApp extends ComponentApplication {
     }
 ```
 ##### 4. 交互调用
-```
+```java
 //在需要调用TaskInfoPage的地方通过StitcherHelper使用
 StitcherHelper.start(new TaskInfoPage(this, "taskId"));
 StitcherHelper.start(new TaskInfoPage(this, "taskId"),1000/*requestCode*/);
@@ -201,7 +201,7 @@ StitcherHelper.start(new TaskInfoPage(this, "taskId"),1000/*requestCode*/);
 实际上我们还有简单的方式进行页面注入，为什么我要先说常规模式呢？ 因为如果万一简单的方式没办法满足你的需求的时候，你依然需要使用常规方式进行开发。
 
 我们在继承实现ActivityPage时，还可以通过PageConsumer直接配置Activity或Action来进行Activity<->ActivityPage的连接。
-```
+```java
 @PageConsumer(clasz = "bamboo.sample.tasks.ui.TaskCountActivity")
 public class TaskListPage extends ActivityPage {
     public TaskListPage(Context context) {
@@ -213,16 +213,16 @@ public class TaskListPage extends ActivityPage {
 
 ##### 6. 特殊Intent参数配置
 在页面交互时我们有时会需要对Intent设置Flag，或需要通过Action或Data方式进行交互，这个时候我们可以通过ActivityPage的targetIntent进行传递，并暂时关闭ActivityPage的连接，[stitcher](https://github.com/bambootang/stitcher)会在这种情况下放弃PageConsumer注解中class的参数链接，直接尝试启动Activity。
-```
-    public void onActionTest(View view) {
-        ActionTestPage page = new ActionTestPage(this);
-        Intent targetIntent = new Intent();
-        targetIntent.setAction("bamboo.sample.actiontest");
-        targetIntent.addCategory(Intent.CATEGORY_DEFAULT);
-        page.setTargetIntent(targetIntent);
-        page.setAutoLink(false);
-        StitcherHelper.start(page);
-    }
+```java
+public void onActionTest(View view) {
+    ActionTestPage page = new ActionTestPage(this);
+    Intent targetIntent = new Intent();
+    targetIntent.setAction("bamboo.sample.actiontest");
+    targetIntent.addCategory(Intent.CATEGORY_DEFAULT);
+    page.setTargetIntent(targetIntent);
+    page.setAutoLink(false);
+    StitcherHelper.start(page);
+}
 ```
 >优先级：
 **TaskPageConsumer > unAutolink > PageConsumer**
@@ -231,21 +231,22 @@ public class TaskListPage extends ActivityPage {
 组件之间的数据交互与页面交互原理是相似的。在onCreateDelay方法中的ComponentRouterRegistry就是数据交互的路由注册表，我们通过它来进行注册。
 具体使用参看以下步骤：
 ##### 1.在router文件夹定义Module的ComponentOutput
-```
+```java
 package bamboo.sample.tasksrouter;
 public interface ITaskComponent extends ComponentOutput{
     int getTaskCount();
 }
 ```
 ##### 2. 在Module 实现该接口
-```
+```java
 public class TasksComponentOutput implements ITaskComponent {
     public int getTaskCount() {
         return 1000;
     }
+}
 ```
 ##### 3. 在onCreateDelay方法中进行注册
-```
+```java
 public class TasksComponentApp extends ComponentApplication {
 
     public void onCreateDelay(ComponentRouterRegistry routerRegistry, ActivityRouterRegistry activityRouterRegistry) {
@@ -255,7 +256,7 @@ public class TasksComponentApp extends ComponentApplication {
 }
 ```
 ##### 4.使用
-```
+```java
 public class ComponentInput {
     public int getTaskCount() {
         ITaskComponent taskComponent = StitcherHelper.searchComponentOutput(ITaskComponent.class);
