@@ -113,7 +113,7 @@ public class StitcherApplication{
 ##### 1. 创建一个Module：sampleouter
 ##### 2. 修改sampleouter的build.gradle文件，在里面加入以下代码：
 这一步的目的是为了把所有Module的projectDir的router文件夹都加入到sampleouter的源码文件夹中，这样一来，我们就能在自己的Module的router文件夹内管理自己对外公开的接口以及页面。
-```gradle
+```groovy
 android {
     ...
     sourceSets {
@@ -143,7 +143,7 @@ android {
 
 
 ##### 3.在Module中配置samplerouter的依赖
-```gradle
+```groovy
 implementation 'bamboo.component:stitcher:1.0'
 implementation project(":samplerouter")
 ```
@@ -268,8 +268,6 @@ public class ComponentInput {
 
 **具体的数据交互流程如下图：**
 ![数据交互流程](https://upload-images.jianshu.io/upload_images/4290785-dd4ba35f1117b32c.png?imageMogr2/auto-orient/strip%7CimageView2/2/w/1240)
-
-到这里，stitcher的使用方式就介绍完了。
 
 
 详细示例请看源码示例。
