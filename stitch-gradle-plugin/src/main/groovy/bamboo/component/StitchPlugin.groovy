@@ -31,8 +31,8 @@ class StitchPlugin implements Plugin<Project> {
 
         }
         project.dependencies {
-            implementation 'bamboo.components.stitch:stitch-core:2.0'
-            annotationProcessor 'bamboo.components.stitch:stitch-compiler:2.0'
+            implementation 'bamboo.components.stitch:stitch-core:1.0'
+            annotationProcessor 'bamboo.components.stitch:stitch-compiler:1.0'
         }
     }
 
