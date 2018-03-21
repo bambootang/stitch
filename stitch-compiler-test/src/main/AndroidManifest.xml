@@ -1,0 +1,5 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="bamboo.com.stitcher.compiler">
+
+    <application></application>
+</manifest>

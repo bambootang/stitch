@@ -1,17 +1,29 @@
-def findProperty(String propertiesFile, String propertyName) {
-    if (propertiesFile != null) {
-        java.util.Properties properties = new java.util.Properties()
-        InputStream inputStream = new File(propertiesFile).newDataInputStream()
-        properties.load(inputStream)
-        def propertyValue = properties.getProperty(propertyName)
-        return propertyValue == null ? "" : propertyValue
-    }
-    return ""
-}
+//def findProperty(String propertiesFile, String propertyName) {
+//    if (propertiesFile != null) {
+//        java.util.Properties properties = new java.util.Properties()
+//        InputStream inputStream = new File(propertiesFile).newDataInputStream()
+//        properties.load(inputStream)
+//        def propertyValue = properties.getProperty(propertyName)
+//        return propertyValue == null ? "" : propertyValue
+//    }
+//    return ""
+//}
+//
+//String[] includes = findProperty(rootDir.absolutePath+"/local.properties", "include").split(",")
+//
+//
+//includes.each {
+//    include it
+//}
 
-String[] includes = findProperty(rootDir.absolutePath+"/local.properties", "include").split(",")
+include ':sample:app'
+include ':sample:component-account'
+include ':sample:component-tasks'
+include ':sample:router'
 
+include ':stitch-compiler-test'
 
-includes.each {
-    include it
-}
+include ':stitch-anno'
+include ':stitch-compiler'
+include ':stitch-gradle-plugin'
+include ':stitch-core'

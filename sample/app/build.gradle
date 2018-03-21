@@ -1,0 +1,70 @@
+import com.android.builder.core.VariantConfiguration
+
+apply plugin: 'com.android.application'
+
+apply plugin: 'stitch.plugin'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "bamboo.component"
+        minSdkVersion 16
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+}
+
+afterEvaluate {
+    project.dependencies.modules.each {
+//        println it
+    }
+    project.components.each {
+//        println it
+    }
+    println project.childProjects.size()
+    println project.subprojects.size()
+    println project.dependencies.components.all {
+//        println it
+    }
+//    println project.dependencies.
+
+    List<String> subPs = new ArrayList<>();
+    project.extensions.android.applicationVariants.all { variant ->
+        Configuration configuration = variant.getCompileConfiguration()
+        DependencySet dependencySet = configuration.getAllDependencies()
+        println dependencySet
+        dependencySet.all {
+            if (it.class.simpleName.contains("DefaultProjectDependency")) {
+                subPs.add(it.name)
+            }
+//            println "${it.class.simpleName.contains("DefaultProjectDependency")}"
+//            println "${it.getGroup()}-${it.name}-${it.version}-${it.class}"
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation('com.android.support.test.espresso:espresso-intents:3.0.1') {
+        exclude module: 'support-annotations'
+    }
+
+    implementation project(':sample:router')
+    implementation project(':sample:component-account')
+    implementation project(':sample:component-tasks')
+
+}

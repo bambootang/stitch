@@ -1,0 +1,11 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="bamboo.sample.account">
+
+    <application>
+
+        <activity
+            android:name=".ui.AccountInfoActivity"
+            android:label="用户信息" />
+
+    </application>
+</manifest>
