@@ -136,6 +136,7 @@ public class TestServiceTest {
 到这里，stitch的使用方式就介绍完了。
 
 组件化脚本优化配置请看：[Android组件化：build.gradle配置](https://www.jianshu.com/p/9620a40c203f)
+
 组件化基本概念请看：[Android组件化开发框架](https://www.jianshu.com/p/3ed9f4c87990)
 
 
