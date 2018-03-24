@@ -8,7 +8,7 @@ Android组件化开发框架
 
 
 具体使用方法：
-##### 1. 自定义ComponentLife子类
+#### 1. 自定义ComponentLife子类
 如果Module不需要在Application的onCreate、attachBaseContext等生命周期时进行初始化操作，不需要自定义ComponentLife类。
 ```java
 @Component
@@ -26,14 +26,16 @@ public class TestComponetLife extends ComponentLife {
     Application application = testComponent.getApplication();
 }
 ```
-##### 2. 传递Application生命周期
+#### 2. 传递Application生命周期
 
 在Application里面我们需要主动传递Application的生命周期给stitch，[stitch](https://github.com/bambootang/stitch)提供了两种实现方式：
 
 **1.  直接继承StitcherApplication**
+
 StitcherApplication继承自Application，只是添加了stitch的生命周期调用
 
 **2.  通过StitcherHelper调用组件的生命周期。**
+
 如果不能直接继承StitcherApplication，在你自己的Application中主动调用StitcherHelper.onCreate()、StitcherHelper. attachBaseContext()等方法，具体可参考StitcherApplication的实现。
 
 ### @Exported、ActivityPage
@@ -43,7 +45,7 @@ ActivityPage 用于与开放的Activity进行关联，同时它实现了Serializ
 
 >在实际使用之前，我们需要新建1个公用Module作为路由Module，这里我们假设我们所有的Module都依赖于名为**Router**的Module,而我们开发的Module名为**ModuleA**，其他Module名为**ModuleB**
 
-##### 1. 使用
+#### 1. 使用
 每一个需要共享给其他Module使用的Activity都需要与一个ActivityPage进行关联，其他Module通过ActivityPage即可与Activity进行交互。
 
 ```java
@@ -71,7 +73,7 @@ public class TestActivity extends Activity {
 }
 ```
 
-##### 2. Intent Flag设置
+#### 2. Intent Flag设置
 在页面交互时我们有时会需要对Intent设置Flag，这个时候我们可以通过ActivityPage的targetIntent进行传递，在启动TestActivity时[stitch](https://github.com/bambootang/stitch)会clone targetIntent的所有参数。
 ```java
 public void onActionTest(View view) {
@@ -83,11 +85,11 @@ public void onActionTest(View view) {
 }
 ```
 
-##### 3.Activity跳转时的参数传递
+#### 3.Activity跳转时的参数传递
 在页面交互时，有时候我们需要往下一个页面传递参数，上面已经提到过Serializable方式，stitch还支持另一种方式：Parcelable
 
 如果你定义的TestPage实现了Parcelable接口，stitch会自动切换为Parcelable方式进行参数传递。
-```
+```java
 // 默认的Serializable方式
 public class TestPage extends ActivityPage {
     ....
