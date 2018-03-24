@@ -49,7 +49,7 @@ android {
 
     signingConfigs {
         signed {
-            storeFile file("../gradle/samplekey.ks")
+            storeFile file("${rootDir.absolutePath}/gradle/samplekey.ks")
             storePassword "samplekey"
             keyAlias "test"
             keyPassword "samplekey"

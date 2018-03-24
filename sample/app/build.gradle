@@ -1,0 +1,77 @@
+apply plugin: 'com.android.application'
+
+
+apply plugin: 'stitch.plugin'
+
+android {
+    compileSdkVersion 26
+    defaultConfig {
+        applicationId "bamboo.component"
+        minSdkVersion 16
+        targetSdkVersion 26
+        versionCode 1
+        versionName "1.0"
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    signingConfigs {
+        signed {
+            storeFile file("${rootDir.absolutePath}/gradle/samplekey.ks")
+            storePassword "samplekey"
+            keyAlias "test"
+            keyPassword "samplekey"
+        }
+    }
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.signed
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.signed
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    flavorDimensions("one", "two", "three")
+
+    productFlavors {
+
+        pre {
+            dimension "one"
+        }
+
+        proc {
+            dimension "two"
+        }
+
+        mock {
+            dimension "three"
+        }
+
+        other {
+            dimension "two"
+        }
+    }
+
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation 'com.android.support:appcompat-v7:26.1.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.0.2'
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.1'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
+    androidTestImplementation('com.android.support.test.espresso:espresso-intents:3.0.1') {
+        exclude module: 'support-annotations'
+    }
+
+    implementation project(':sample:router')
+    implementation project(':sample:component-account')
+    implementation project(':sample:component-tasks')
+    implementation 'bamboo.components.stitch:stitch-core:1.0'
+
+}

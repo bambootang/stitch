@@ -1,0 +1,11 @@
+apply plugin: 'java-library'
+
+group = "bamboo.components.stitch"
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+//apply from: "${rootProject.rootDir}/gradle/java_publish.gradle"

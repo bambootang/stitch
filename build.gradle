@@ -16,6 +16,8 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
 
+        classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.0'
+
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
     }
@@ -45,8 +47,8 @@ subprojects { subp ->
     }
     subp.afterEvaluate {
 
-        if (subp.extensions.findByName('android') != null
-                && !getPlugins().hasPlugin("com.android.application")) {
+        if (subp.plugins.hasPlugin('com.android.library')
+                && !subp.plugins.hasPlugin("com.android.application")) {
             android.libraryVariants.all { variant ->
                 if (variant.name.equals('release')) {
                     //android工程
@@ -76,7 +78,7 @@ subprojects { subp ->
                     }
                 }
             }
-        } else if (subp.extensions.findByName('android') == null) {
+        } else if (subp.plugins.hasPlugin("java")) {
             //java工程
             //生成source 以及 doc文件，如果要发到远程仓库必须要这个东西
             task('sourcesJar', type: Jar) {

@@ -1,0 +1,65 @@
+apply plugin: 'maven'
+apply plugin: 'com.jfrog.bintray'
+
+def siteUrl = 'https://github.com/bambootang/stitch'      // 项目的主页
+def gitUrl = 'https://github.com/bambootang/stitch.git'   // Git仓库的url
+group = "bamboo.components.stitch"         // Maven Group ID for the artifact，一般填你唯一的包名
+install {
+    repositories.mavenInstaller {
+        // This generates POM.xml with proper parameters
+        pom {
+            project {
+                packaging 'jar'
+                // Add your description here
+                name '组件化.'     //项目描述
+                url siteUrl
+                // Set your license
+                licenses {
+                    license {
+                        name 'The Apache Software License, Version 2.0'
+                        url 'http://www.apache.org/licenses/LICENSE-2.0.txt'
+                    }
+                }
+                developers {
+                    developer {
+                        id 'kerwin'        //填写的一些基本信息
+                        name 'kerwin'
+                        email 'tsoorr@qq.com'
+                    }
+                }
+                scm {
+                    connection gitUrl
+                    developerConnection gitUrl
+                    url siteUrl
+                }
+            }
+        }
+    }
+}
+task('sourcesJar', type: Jar) {
+    from sourceSets.main.java.srcDirs
+    classifier = 'sources'
+}
+task('javadocJar', type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+artifacts {
+    archives javadocJar
+    archives sourcesJar
+}
+Properties properties = new Properties()
+properties.load(project.rootProject.file('local.properties').newDataInputStream())
+bintray {
+    user = properties.getProperty("bintray.user")
+    key = properties.getProperty("bintray.apikey")
+    configurations = ['archives']
+    pkg {
+        repo = "bamboo"
+        name = project.name    //发布到JCenter上的项目名字
+        websiteUrl = siteUrl
+        vcsUrl = gitUrl
+        licenses = ["Apache-2.0"]
+        publish = true
+    }
+}

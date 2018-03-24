@@ -3,13 +3,10 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Stitcher.iml" filepath="$PROJECT_DIR$/Stitcher.iml" />
-      <module fileurl="file://$PROJECT_DIR$/datarouter-compiler/datarouter-compiler.iml" filepath="$PROJECT_DIR$/datarouter-compiler/datarouter-compiler.iml" />
-      <module fileurl="file://$PROJECT_DIR$/sampleapp/sampleapp.iml" filepath="$PROJECT_DIR$/sampleapp/sampleapp.iml" />
-      <module fileurl="file://$PROJECT_DIR$/samplemoduleaccount/samplemoduleaccount.iml" filepath="$PROJECT_DIR$/samplemoduleaccount/samplemoduleaccount.iml" />
-      <module fileurl="file://$PROJECT_DIR$/samplemoduletasks/samplemoduletasks.iml" filepath="$PROJECT_DIR$/samplemoduletasks/samplemoduletasks.iml" />
-      <module fileurl="file://$PROJECT_DIR$/samplerouter/samplerouter.iml" filepath="$PROJECT_DIR$/samplerouter/samplerouter.iml" />
-      <module fileurl="file://$PROJECT_DIR$/stitcher/stitcher.iml" filepath="$PROJECT_DIR$/stitcher/stitcher.iml" />
-      <module fileurl="file://$PROJECT_DIR$/testrouter/testrouter.iml" filepath="$PROJECT_DIR$/testrouter/testrouter.iml" />
+      <module fileurl="file://$PROJECT_DIR$/stitch-anno/stitch-anno.iml" filepath="$PROJECT_DIR$/stitch-anno/stitch-anno.iml" />
+      <module fileurl="file://$PROJECT_DIR$/stitch-compiler/stitch-compiler.iml" filepath="$PROJECT_DIR$/stitch-compiler/stitch-compiler.iml" />
+      <module fileurl="file://$PROJECT_DIR$/stitch-core/stitch-core.iml" filepath="$PROJECT_DIR$/stitch-core/stitch-core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/stitch-gradle-plugin/stitch-gradle-plugin.iml" filepath="$PROJECT_DIR$/stitch-gradle-plugin/stitch-gradle-plugin.iml" />
     </modules>
   </component>
 </project>

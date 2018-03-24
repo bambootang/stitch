@@ -1,9 +1,9 @@
 apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
-def siteUrl = 'https://github.com/bambootang/stitcher'      // 项目的主页
-def gitUrl = 'https://github.com/bambootang/stitcher.git'   // Git仓库的url
-group = "bamboo.component"         // Maven Group ID for the artifact，一般填你唯一的包名
+def siteUrl = 'https://github.com/bambootang/stitch'      // 项目的主页
+def gitUrl = 'https://github.com/bambootang/stitch.git'   // Git仓库的url
+group = "bamboo.components.stitch"         // Maven Group ID for the artifact，一般填你唯一的包名
 install {
     repositories.mavenInstaller {
         // This generates POM.xml with proper parameters
@@ -60,7 +60,7 @@ bintray {
     key = properties.getProperty("bintray.apikey")
     configurations = ['archives']
     pkg {
-        repo = "architecture"
+        repo = "bamboo"
         name = project.name    //发布到JCenter上的项目名字
         websiteUrl = siteUrl
         vcsUrl = gitUrl
@@ -68,5 +68,3 @@ bintray {
         publish = true
     }
 }
-
-//apply from: rootProject.file('gradle/check.gradle')

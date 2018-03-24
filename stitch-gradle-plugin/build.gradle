@@ -1,0 +1,17 @@
+apply plugin: 'java-gradle-plugin'
+apply plugin: 'groovy'
+
+group = "bamboo.components.stitch"
+version = '1.0'
+dependencies {
+    compileOnly gradleApi()
+    compile localGroovy()
+    compile 'com.android.tools.build:gradle:3.0.1'
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+}
+
+sourceCompatibility = "1.7"
+targetCompatibility = "1.7"
+
+
+//apply from: "${rootProject.rootDir}/gradle/java_publish.gradle"
