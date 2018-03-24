@@ -22,9 +22,10 @@ import javax.lang.model.element.ExecutableElement;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
 import javax.tools.JavaFileObject;
+import javax.tools.StandardLocation;
 
-import bamboo.component.stitch.anno.AutoLink;
-import bamboo.component.stitch.anno.LifeCycle;
+import bamboo.component.stitch.anno.Exported;
+import bamboo.component.stitch.anno.Component;
 import bamboo.component.stitch.anno.Service;
 
 
@@ -33,7 +34,7 @@ import bamboo.component.stitch.anno.Service;
  */
 
 @AutoService(Processor.class)
-public final class StitherProcess extends AbstractProcessor {
+public final class StithBinderProcess extends AbstractProcessor {
 
 
     bamboo.component.stitch.compiler.ComponentBinding binding = new bamboo.component.stitch.compiler.ComponentBinding();
@@ -45,11 +46,11 @@ public final class StitherProcess extends AbstractProcessor {
 
     @Override
     public boolean process(Set<? extends TypeElement> annotations, RoundEnvironment roundEnv) {
-        Set<? extends Element> lifeElements = roundEnv.getElementsAnnotatedWith(LifeCycle.class);
+        Set<? extends Element> lifeElements = roundEnv.getElementsAnnotatedWith(Component.class);
         processLifeCycle(lifeElements);
         Set<? extends Element> serviceElements = roundEnv.getElementsAnnotatedWith(Service.class);
         processServiceAnnotaion(serviceElements);
-        Set<? extends Element> pageElements = roundEnv.getElementsAnnotatedWith(AutoLink.class);
+        Set<? extends Element> pageElements = roundEnv.getElementsAnnotatedWith(Exported.class);
         processPageAnnotation(pageElements);
         if (lifeElements.size() != 0 || serviceElements.size() != 0 || pageElements.size() != 0)
             writeComponentBinding();
@@ -63,8 +64,8 @@ public final class StitherProcess extends AbstractProcessor {
                     String implement = binding.serviceBindings.get(0).implementClass;
                     binding.componentImpPackage = implement.substring(0, implement.lastIndexOf("."));
                     binding.componentName = "";
-                } else if (binding.pageBindings != null && binding.pageBindings.size() > 0) {
-                    String implement = binding.pageBindings.get(0).targetActivity;
+                } else if (binding.activityBindings != null && binding.activityBindings.size() > 0) {
+                    String implement = binding.activityBindings.get(0).targetActivity;
                     binding.componentImpPackage = implement.substring(0, implement.lastIndexOf("."));
                     binding.componentName = "";
                 } else {
@@ -72,11 +73,9 @@ public final class StitherProcess extends AbstractProcessor {
                 }
             }
             ModuleSovle moduleSovle = new ModuleSovle(processingEnv.getFiler()
-                    .createSourceFile("tmp"), "tmp");
+                    .createResource(StandardLocation.SOURCE_OUTPUT, "", "tmp"), "tmp");
             String packageName = moduleSovle.findPackageName();
             String moduleName = moduleSovle.getModuleName();
-            System.out.println(packageName);
-            System.out.println(moduleName);
             if (packageName != null && moduleName != null) {
                 binding.modulePackageId = packageName;
                 binding.moduleName = moduleName;
@@ -107,29 +106,29 @@ public final class StitherProcess extends AbstractProcessor {
     @Override
     public Set<String> getSupportedAnnotationTypes() {
         Set<String> types = new LinkedHashSet<>();
-        types.add(LifeCycle.class.getCanonicalName());
-        types.add(AutoLink.class.getCanonicalName());
+        types.add(Component.class.getCanonicalName());
+        types.add(Exported.class.getCanonicalName());
         types.add(Service.class.getCanonicalName());
         return types;
     }
 
     private void processPageAnnotation(Set<? extends Element> pageElements) {
-        ImmutableList.Builder<PageBinding> pageBindingBuilder = ImmutableList.builder();
+        ImmutableList.Builder<ActivityBinding> pageBindingBuilder = ImmutableList.builder();
         for (Element e : pageElements) {
             TypeElement element = (TypeElement) e;
             Object linkClass = getAutoLink(element);
-            PageBinding pageBinding = new PageBinding();
-            pageBinding.pageLink = linkClass.toString();
-            pageBinding.targetActivity = element.getQualifiedName().toString();
-            pageBindingBuilder.add(pageBinding);
+            ActivityBinding activityBinding = new ActivityBinding();
+            activityBinding.pageLink = linkClass.toString();
+            activityBinding.targetActivity = element.getQualifiedName().toString();
+            pageBindingBuilder.add(activityBinding);
         }
-        binding.pageBindings = pageBindingBuilder.build();
+        binding.activityBindings = pageBindingBuilder.build();
     }
 
 
     private void processLifeCycle(Set<? extends Element> elements) {
         if (elements.size() > 1) {
-            throw new IllegalArgumentException("duplicate LifeCycle.");
+            throw new IllegalArgumentException("duplicate Component.");
         }
         for (Element e : elements) {
             binding.componentImpPackage = "" + e.getEnclosingElement();
@@ -201,7 +200,7 @@ public final class StitherProcess extends AbstractProcessor {
 
 
     public Object getAutoLink(TypeElement foo) {
-        AnnotationMirror am = getAnnotationMirror(foo, AutoLink.class);
+        AnnotationMirror am = getAnnotationMirror(foo, Exported.class);
         if (am == null) {
             return null;
         }

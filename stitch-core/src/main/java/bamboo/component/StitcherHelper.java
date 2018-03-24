@@ -5,25 +5,24 @@ import android.app.Application;
 import android.content.Context;
 import android.content.res.Configuration;
 
-import java.util.Collection;
-
-import bamboo.component.lifecycle.ComponentApplication;
+import bamboo.component.lifecycle.ComponentLife;
 import bamboo.component.lifecycle.ComponentLifeRegistry;
 import bamboo.component.lifecycle.IComponentLifeCycle;
 import bamboo.component.page.ActivityPage;
-import bamboo.component.page.PageHolder;
-import bamboo.component.page.PageRegistry;
+import bamboo.component.page.ActivityHolder;
+import bamboo.component.page.ActivityRegistry;
 import bamboo.component.service.ServiceRegistry;
 
 public final class StitcherHelper {
 
-    private static PageRegistry pageRegistry = new PageRegistry();
+    private static ActivityRegistry activityRegistry = new ActivityRegistry();
 
     private static ComponentLifeRegistry componentLifeRegistry = new ComponentLifeRegistry();
 
     private static ServiceRegistry outputRouterRegistry = new ServiceRegistry();
 
     private StitcherHelper() {
+
     }
 
     static void setComponentLifeRegistry(ComponentLifeRegistry componentLifeRegistry) {
@@ -37,6 +36,16 @@ public final class StitcherHelper {
      */
     public static void init(Application application) {
         componentLifeRegistry.registerFromManifest(application);
+        registerComponent();
+    }
+
+    private static void registerComponent() {
+        Iterable<ComponentLife> componentApplications = componentLifeRegistry.getAll();
+        for (ComponentLife componentLife : componentApplications) {
+            if (componentLife instanceof IRegistry) {
+                ((IRegistry) componentLife).register(outputRouterRegistry, activityRegistry);
+            }
+        }
     }
 
 
@@ -47,7 +56,7 @@ public final class StitcherHelper {
      * @param <T>
      * @return
      */
-    public static <T extends ComponentApplication> T searchComponentApplication(Class<T> clasz) {
+    public static <T extends ComponentLife> T searchComponentApplication(Class<T> clasz) {
         return componentLifeRegistry.search(clasz);
     }
 
@@ -68,9 +77,9 @@ public final class StitcherHelper {
      * @see IComponentLifeCycle#onCreate()
      */
     public static void onCreate() {
-        Iterable<ComponentApplication> componentApplications = componentLifeRegistry.getAll();
-        for (ComponentApplication componentApplication : componentApplications) {
-            componentApplication.onCreate();
+        Iterable<ComponentLife> componentApplications = componentLifeRegistry.getAll();
+        for (ComponentLife componentLife : componentApplications) {
+            componentLife.onCreate();
         }
     }
 
@@ -78,12 +87,9 @@ public final class StitcherHelper {
      * @see IComponentLifeCycle#onCreateDelay()
      */
     public static void onCreateDelay() {
-        Iterable<ComponentApplication> componentApplications = componentLifeRegistry.getAll();
-        for (ComponentApplication componentApplication : componentApplications) {
-            componentApplication.onCreateDelay();
-            if (componentApplication instanceof IRegistry) {
-                ((IRegistry) componentApplication).register(outputRouterRegistry, pageRegistry);
-            }
+        Iterable<ComponentLife> componentApplications = componentLifeRegistry.getAll();
+        for (ComponentLife componentLife : componentApplications) {
+            componentLife.onCreateDelay();
         }
     }
 
@@ -93,9 +99,9 @@ public final class StitcherHelper {
      * @see IComponentLifeCycle#attachBaseContext(Context)
      */
     public static void attachBaseContext(Context baseContext) {
-        Iterable<ComponentApplication> componentApplications = componentLifeRegistry.getAll();
-        for (ComponentApplication componentApplication : componentApplications) {
-            componentApplication.attachBaseContext(baseContext);
+        Iterable<ComponentLife> componentApplications = componentLifeRegistry.getAll();
+        for (ComponentLife componentLife : componentApplications) {
+            componentLife.attachBaseContext(baseContext);
         }
     }
 
@@ -106,9 +112,9 @@ public final class StitcherHelper {
      * @see IComponentLifeCycle#onTrimMemory(int)
      */
     public static void onTrimMemory(int level) {
-        Iterable<ComponentApplication> componentApplications = componentLifeRegistry.getAll();
-        for (ComponentApplication componentApplication : componentApplications) {
-            componentApplication.onTrimMemory(level);
+        Iterable<ComponentLife> componentApplications = componentLifeRegistry.getAll();
+        for (ComponentLife componentLife : componentApplications) {
+            componentLife.onTrimMemory(level);
         }
     }
 
@@ -118,9 +124,9 @@ public final class StitcherHelper {
      * @see IComponentLifeCycle#onLowMemory()
      */
     public static void onLowMemory() {
-        Iterable<ComponentApplication> componentApplications = componentLifeRegistry.getAll();
-        for (ComponentApplication componentApplication : componentApplications) {
-            componentApplication.onLowMemory();
+        Iterable<ComponentLife> componentApplications = componentLifeRegistry.getAll();
+        for (ComponentLife componentLife : componentApplications) {
+            componentLife.onLowMemory();
         }
     }
 
@@ -130,9 +136,9 @@ public final class StitcherHelper {
      * @see IComponentLifeCycle#onConfigurationChanged(Configuration)
      */
     public static void onConfigurationChanged(Configuration newConfig) {
-        Iterable<ComponentApplication> componentApplications = componentLifeRegistry.getAll();
-        for (ComponentApplication componentApplication : componentApplications) {
-            componentApplication.onConfigurationChanged(newConfig);
+        Iterable<ComponentLife> componentApplications = componentLifeRegistry.getAll();
+        for (ComponentLife componentLife : componentApplications) {
+            componentLife.onConfigurationChanged(newConfig);
         }
     }
 
@@ -153,6 +159,6 @@ public final class StitcherHelper {
      * @param requestCode RequestCode，-1表示不接收返回值
      */
     public static void startActivityForResult(ActivityPage page, int requestCode) {
-        PageHolder.startActivityForResult(pageRegistry, page, requestCode);
+        ActivityHolder.startActivityForResult(activityRegistry, page, requestCode);
     }
 }

@@ -16,8 +16,8 @@ import static org.junit.Assert.*;
 @RunWith(MockitoJUnitRunner.class)
 public class ComponentLifeRegistryTest {
 
-    MockComponentAApplication aApplication = new MockComponentAApplication();
-    MockComponentBApplication bApplication = new MockComponentBApplication();
+    MockComponentALife aApplication = new MockComponentALife();
+    MockComponentBLife bApplication = new MockComponentBLife();
 
     ComponentLifeRegistry componentLifeRegistry = new ComponentLifeRegistry();
 
@@ -32,7 +32,7 @@ public class ComponentLifeRegistryTest {
         componentLifeRegistry.register(bApplication);
         componentLifeRegistry.register(bApplication);
         componentLifeRegistry.register(bApplication);
-        Collection<ComponentApplication> applications = componentLifeRegistry.getAll();
+        Collection<ComponentLife> applications = componentLifeRegistry.getAll();
         assertEquals(applications.size(), 2);
         assertEquals(applications.toArray()[0], aApplication);
         assertEquals(applications.toArray()[1], bApplication);
@@ -40,8 +40,8 @@ public class ComponentLifeRegistryTest {
 
     @Test
     public void lifeCycleInvoke(){
-        aApplication = Mockito.mock(MockComponentAApplication.class);
-        bApplication = Mockito.mock(MockComponentBApplication.class);
+        aApplication = Mockito.mock(MockComponentALife.class);
+        bApplication = Mockito.mock(MockComponentBLife.class);
         componentLifeRegistry.register(aApplication);
         componentLifeRegistry.register(bApplication);
     }

@@ -4,7 +4,7 @@ ext {
 
 apply from: "${rootProject.rootDir}/gradle/android.gradle"
 
-apply plugin:"stitch.plugin"
+apply plugin: "stitch.plugin"
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -15,4 +15,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     implementation project(":sample:router")
+
+
 }

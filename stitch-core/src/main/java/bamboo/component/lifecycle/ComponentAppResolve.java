@@ -14,11 +14,11 @@ public class ComponentAppResolve {
 
     private static boolean inited = false;
 
-    private static final List<ComponentApplication> applibraries = new ArrayList<>();
+    private static final List<ComponentLife> applibraries = new ArrayList<>();
 
-    private static final String COMPONENt_META_NAME = "ComponentApplication";
+    private static final String COMPONENt_META_NAME = "ComponentLife";
 
-    static List<ComponentApplication> findAllAppLibrary(Application context) {
+    static List<ComponentLife> findAllAppLibrary(Application context) {
         if (!inited) {
             synchronized (ComponentAppResolve.class) {
                 if (!inited) {
@@ -58,9 +58,9 @@ public class ComponentAppResolve {
         }
     }
 
-    private static void addApplibrary(Class<? extends ComponentApplication> applibraryClass, Application application) {
+    private static void addApplibrary(Class<? extends ComponentLife> applibraryClass, Application application) {
         try {
-            ComponentApplication app = applibraryClass.newInstance();
+            ComponentLife app = applibraryClass.newInstance();
             app.setApplication(application);
             applibraries.add(app);
         } catch (Exception e) {

@@ -1,11 +1,11 @@
 package bamboo.sample.account.component;
 
-import bamboo.component.lifecycle.ComponentApplication;
+import bamboo.component.lifecycle.ComponentLife;
 import bamboo.component.lifecycle.ComponentPriority;
-import bamboo.component.stitch.anno.LifeCycle;
+import bamboo.component.stitch.anno.Component;
 
-@LifeCycle
-public class AccountComponentApp extends ComponentApplication {
+@Component
+public class AccountComponentLife extends ComponentLife {
 
 
     @Override

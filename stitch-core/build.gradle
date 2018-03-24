@@ -34,4 +34,4 @@ dependencies {
     compile project(":stitch-anno")
 }
 
-apply from: "${rootProject.rootDir}/gradle/android_publish.gradle"
+//apply from: "${rootProject.rootDir}/gradle/android_publish.gradle"

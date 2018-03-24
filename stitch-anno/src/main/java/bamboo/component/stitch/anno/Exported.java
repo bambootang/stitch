@@ -10,7 +10,7 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.CLASS)
 @Target(ElementType.TYPE)
-public @interface AutoLink {
+public @interface Exported {
 
     /**
      * @return Activity所对应的 ActivityPage 的类名

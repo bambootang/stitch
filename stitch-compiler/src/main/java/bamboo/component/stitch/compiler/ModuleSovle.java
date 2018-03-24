@@ -8,6 +8,7 @@ import java.io.IOException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import javax.tools.FileObject;
 import javax.tools.JavaFileObject;
 
 /**
@@ -16,16 +17,16 @@ import javax.tools.JavaFileObject;
 
 public class ModuleSovle {
 
-    JavaFileObject javaFileObject;
+    FileObject javaFileObject;
     String fileName;
 
     private String variantName;
     private String moduleDir;
     private String moduleName;
+    private String flavorName;
 
-    ///Users/tangshuai/DemoProjects/Stitcher/stitch-compiler-test/build/generated/source/apt/debug
 
-    public ModuleSovle(JavaFileObject javaFileObject, String fileName) {
+    public ModuleSovle(FileObject javaFileObject, String fileName) {
         this.javaFileObject = javaFileObject;
         this.fileName = fileName;
         parseModule();
@@ -33,13 +34,14 @@ public class ModuleSovle {
 
     private void parseModule() {
         File file = new File(javaFileObject.toUri().getPath());
-        System.out.println(fileName);
-        String outdir = file.getAbsolutePath().replace(fileName.replace(".", File.separator) + ".java", "");
-        outdir = outdir.substring(0, outdir.length() - 1);
-        System.out.println(outdir);
-        variantName = outdir.substring(outdir.lastIndexOf(File.separator) + 1, outdir.length());
-        System.out.println(variantName);
-        File moduleDirFile = new File(outdir)//variantName
+        File variantOutFile = new File(file.getAbsolutePath().replace(fileName, ""));
+        variantName = variantOutFile.getName();
+        File outdir = variantOutFile;
+        if (!variantOutFile.getParentFile().getName().equals("apt")) {
+            flavorName = variantOutFile.getParentFile().getName();
+            outdir = variantOutFile.getParentFile();
+        }
+        File moduleDirFile = outdir//variantName
                 .getParentFile()//apt
                 .getParentFile()//source
                 .getParentFile()//generated
@@ -47,6 +49,18 @@ public class ModuleSovle {
                 .getParentFile();//module_base_dir
         moduleDir = moduleDirFile.getAbsolutePath();
         moduleName = moduleDirFile.getName();
+//        System.out.println(fileName);
+//        System.out.println(moduleDir);
+//        System.out.println(moduleName);
+//        System.out.println(flavorName);
+        try {
+            javaFileObject.openWriter().close();
+            if (new File(javaFileObject.toUri().getPath()).delete()) {
+//                System.out.println(" javaFileObject.delete() ");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public String findPackageName() {
@@ -55,6 +69,7 @@ public class ModuleSovle {
                 + File.separator + "intermediates"
                 + File.separator + "manifests"
                 + File.separator + "full"
+                + (flavorName == null ? "" : (File.separator + flavorName))
                 + File.separator + variantName;
         try {
             Pattern pattern = Pattern.compile("package=\"\\S+\"");
@@ -62,7 +77,6 @@ public class ModuleSovle {
             BufferedReader bufferedReader = new BufferedReader(fileReader);
             String s;
             while ((s = bufferedReader.readLine()) != null) {
-                System.out.println(s);
                 Matcher matcher = pattern.matcher(s);
                 if (matcher.find()) {
                     String matcherS = matcher.group();

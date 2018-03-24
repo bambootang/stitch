@@ -7,12 +7,12 @@ import android.view.View;
 
 import bamboo.component.actiontest.ActionTestPage;
 import bamboo.component.intenttest.IntentTestPage;
-import bamboo.component.lifecycle.ComponentApplication;
+import bamboo.component.lifecycle.ComponentLife;
 import bamboo.component.paramtest.ParcelableTestPage;
 import bamboo.component.paramtest.SerializableTestPage;
-import bamboo.sample.account.component.AccountComponentApp;
+import bamboo.sample.account.component.AccountComponentLife;
 import bamboo.sample.accountrouter.AccountInfoPage;
-import bamboo.sample.tasks.component.TasksComponentApp;
+import bamboo.sample.tasks.component.TasksComponentLife;
 import bamboo.sample.tasksrouter.TaskInfoPage;
 import bamboo.sample.tasksrouter.TaskListPage;
 
@@ -23,10 +23,10 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         StitcherHelper.onCreateDelay();
-        ComponentApplication componentApplication = StitcherHelper.searchComponentApplication(ComponentApplication.class);
+        ComponentLife componentApplication = StitcherHelper.searchComponentApplication(ComponentLife.class);
         System.out.println(componentApplication);
-        System.out.println(StitcherHelper.searchComponentApplication(AccountComponentApp.class));
-        System.out.println(StitcherHelper.searchComponentApplication(TasksComponentApp.class));
+        System.out.println(StitcherHelper.searchComponentApplication(AccountComponentLife.class));
+        System.out.println(StitcherHelper.searchComponentApplication(TasksComponentLife.class));
     }
 
     public void onTaskList(View view) {

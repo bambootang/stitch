@@ -7,15 +7,15 @@ import android.view.View;
 import android.widget.TextView;
 
 import bamboo.component.StitcherHelper;
-import bamboo.component.stitch.anno.AutoLink;
+import bamboo.component.stitch.anno.Exported;
 import bamboo.sample.tasks.R;
 import bamboo.sample.tasks.component.ComponentInput;
-import bamboo.sample.tasks.component.TasksComponentApp;
+import bamboo.sample.tasks.component.TasksComponentLife;
 import bamboo.sample.tasks.models.TasksRepository;
 import bamboo.sample.tasksrouter.TaskListPage;
 
 
-@AutoLink(TaskListPage.class)
+@Exported(TaskListPage.class)
 public class TaskCountActivity extends Activity {
 
     private TextView mUserTextView;
@@ -30,7 +30,7 @@ public class TaskCountActivity extends Activity {
 
         setContentView(R.layout.tasks_activity_taskcount);
 
-        tasksRepository = StitcherHelper.searchComponentApplication(TasksComponentApp.class).getTasksRepository();
+        tasksRepository = StitcherHelper.searchComponentApplication(TasksComponentLife.class).getTasksRepository();
 
         mUserTextView = findViewById(R.id.tv_user);
         mTaskSizeTextView = findViewById(R.id.tv_tasks_size);

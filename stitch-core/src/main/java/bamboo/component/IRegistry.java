@@ -1,7 +1,7 @@
 package bamboo.component;
 
 import bamboo.component.service.ServiceRegistry;
-import bamboo.component.page.PageRegistry;
+import bamboo.component.page.ActivityRegistry;
 
 /**
  * Created by tangshuai on 2018/3/19.
@@ -9,6 +9,6 @@ import bamboo.component.page.PageRegistry;
 
 public interface IRegistry {
 
-    void register(ServiceRegistry serviceRegistry, PageRegistry pageRegistry);
+    void register(ServiceRegistry serviceRegistry, ActivityRegistry activityRegistry);
 
 }

@@ -1,27 +1,27 @@
-//def findProperty(String propertiesFile, String propertyName) {
-//    if (propertiesFile != null) {
-//        java.util.Properties properties = new java.util.Properties()
-//        InputStream inputStream = new File(propertiesFile).newDataInputStream()
-//        properties.load(inputStream)
-//        def propertyValue = properties.getProperty(propertyName)
-//        return propertyValue == null ? "" : propertyValue
-//    }
-//    return ""
-//}
-//
-//String[] includes = findProperty(rootDir.absolutePath+"/local.properties", "include").split(",")
-//
-//
-//includes.each {
-//    include it
-//}
+def findProperty(String propertiesFile, String propertyName) {
+    if (propertiesFile != null) {
+        java.util.Properties properties = new java.util.Properties()
+        InputStream inputStream = new File(propertiesFile).newDataInputStream()
+        properties.load(inputStream)
+        def propertyValue = properties.getProperty(propertyName)
+        return propertyValue == null ? "" : propertyValue
+    }
+    return ""
+}
 
-include ':sample:app'
-include ':sample:component-account'
-include ':sample:component-tasks'
-include ':sample:router'
+//sample : include=sample:app,sample:component-account,sample:component-tasks
+String[] includes = findProperty(rootDir.absolutePath + "/local.properties", "include").split(",")
 
-include ':stitch-compiler-test'
+
+includes.each {
+    include it
+}
+
+//include ':sample:app'
+//include ':sample:component-account'
+//include ':sample:component-tasks'
+//include ':sample:router'
+
 
 include ':stitch-anno'
 include ':stitch-compiler'

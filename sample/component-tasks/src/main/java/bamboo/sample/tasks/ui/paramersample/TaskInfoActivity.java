@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
-import bamboo.component.stitch.anno.AutoLink;
+import bamboo.component.stitch.anno.Exported;
 import bamboo.sample.tasks.R;
 import bamboo.sample.tasksrouter.TaskInfoPage;
 
@@ -13,7 +13,7 @@ import bamboo.sample.tasksrouter.TaskInfoPage;
  * Created by tangshuai on 2018/3/17.
  */
 
-@AutoLink(TaskInfoPage.class)
+@Exported(TaskInfoPage.class)
 public class TaskInfoActivity extends Activity {
 
     private TextView mTaskIdTextView;

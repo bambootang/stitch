@@ -27,7 +27,7 @@ public class ComponentBinding {
     String modulePackageId;
 
     ImmutableList<ServiceBinding> serviceBindings;
-    ImmutableList<PageBinding> pageBindings;
+    ImmutableList<ActivityBinding> activityBindings;
 
     public String getBindingClassName() {
         return (modulePackageId == null ? componentImpPackage : modulePackageId) + "." + moduleName + "_ComponentBinding";
@@ -49,9 +49,9 @@ public class ComponentBinding {
         if (componentName != null && componentName.length() > 0) {
             stringBuilder.append(" extends " + componentImpPackage + "." + componentName);//继承Component实现类
         } else {
-            stringBuilder.append(" extends bamboo.component.lifecycle.ComponentApplication");//继承Component实现类
+            stringBuilder.append(" extends bamboo.component.lifecycle.ComponentLife");//继承Component实现类
             componentImpPackage = "bamboo.component.lifecycle";
-            componentName = "ComponentApplication";
+            componentName = "ComponentLife";
         }
         stringBuilder.append(" implements " + REGISTRY_INTERFACE + " {\n\n");//继承Component实现类
         return stringBuilder.toString();
@@ -64,7 +64,7 @@ public class ComponentBinding {
 
     public String getBindingCode() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(TAB_SPACE + "public void register(ServiceRegistry serviceRegistry, PageRegistry pageRegistry) {\n");
+        stringBuilder.append(TAB_SPACE + "public void register(ServiceRegistry serviceRegistry, ActivityRegistry activityRegistry) {\n\n");
         if (serviceBindings != null) {
             //define service object
             HashSet<String> objectName = new HashSet<>();//解决重名
@@ -80,14 +80,14 @@ public class ComponentBinding {
                 stringBuilder.append(String.format("new %s();\n", service.implementClass));
             }
             for (ServiceBinding service : serviceBindings) {
-                stringBuilder.append(String.format(TAB_SPACE_DOUBLE + "serviceRegistry.register(%s, %s);\n"
+                stringBuilder.append(String.format(TAB_SPACE_DOUBLE + "serviceRegistry.register(%s, %s);\n\n"
                         , service.interfaceClass + ".class"
                         , service.implementClass.replace(".", "_").toLowerCase()));
             }
         }
-        if (pageBindings != null) {
-            for (PageBinding page : pageBindings) {
-                stringBuilder.append(String.format(TAB_SPACE_DOUBLE + "pageRegistry.register(\"%s\",\"%s\");\n"
+        if (activityBindings != null) {
+            for (ActivityBinding page : activityBindings) {
+                stringBuilder.append(String.format(TAB_SPACE_DOUBLE + "activityRegistry.register(\"%s\",\"%s\");\n\n"
                         , page.pageLink
                         , page.targetActivity));
             }
@@ -108,7 +108,7 @@ public class ComponentBinding {
 
     public String getImportCode() {
         return "import bamboo.component.service.ServiceRegistry;\n" +
-                "import bamboo.component.page.PageRegistry;\n\n";
+                "import bamboo.component.page.ActivityRegistry;\n\n";
     }
 
 }

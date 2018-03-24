@@ -2,9 +2,39 @@ ext {
     resourcePrefix = "account"
 }
 
-apply from:"${rootProject.rootDir}/gradle/android.gradle"
+apply from: "${rootProject.rootDir}/gradle/android.gradle"
+apply plugin: "stitch.plugin"
 
-apply plugin:"stitch.plugin"
+
+
+android {
+
+
+    flavorDimensions("one", "two", "three")
+
+    productFlavors {
+
+        pre {
+            dimension "one"
+        }
+
+        proc {
+            dimension "two"
+        }
+
+        mock {
+            dimension "three"
+        }
+
+        other {
+            dimension "two"
+        }
+
+        other2 {
+            dimension "two"
+        }
+    }
+}
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
@@ -15,4 +45,5 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     implementation project(":sample:router")
+    implementation project(":sample:component-tasks")
 }

@@ -17,11 +17,6 @@ public class StitcherApplication extends Application {
     }
 
 
-    public void onCreateDelay() {
-        StitcherHelper.onCreateDelay();
-    }
-
-
     public void attachBaseContext(Context baseContext) {
         super.attachBaseContext(baseContext);
         StitcherHelper.init(this);

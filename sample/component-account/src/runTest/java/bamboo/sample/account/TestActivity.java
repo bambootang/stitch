@@ -6,7 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import bamboo.component.ArchitectureHelper;
+import bamboo.component.StitcherHelper;
 import bamboo.sample.account.ui.AccountInfoActivity;
 
 /**
@@ -20,7 +20,7 @@ public class TestActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.account_activity_test);
 
-        ArchitectureHelper.onCreateDelay();
+        StitcherHelper.onCreateDelay();
     }
 
     public void onAccountInfo(View view) {

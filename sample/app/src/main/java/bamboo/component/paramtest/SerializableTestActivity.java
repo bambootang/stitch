@@ -6,13 +6,13 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import bamboo.component.R;
-import bamboo.component.stitch.anno.AutoLink;
+import bamboo.component.stitch.anno.Exported;
 
 /**
  * Created by tangshuai on 2018/3/17.
  */
 
-@AutoLink(SerializableTestPage.class)
+@Exported(SerializableTestPage.class)
 public class SerializableTestActivity extends Activity {
 
     private TextView mParam1TextView;

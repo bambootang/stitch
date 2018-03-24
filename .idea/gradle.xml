@@ -8,14 +8,8 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/sample" />
-            <option value="$PROJECT_DIR$/sample/app" />
-            <option value="$PROJECT_DIR$/sample/component-account" />
-            <option value="$PROJECT_DIR$/sample/component-tasks" />
-            <option value="$PROJECT_DIR$/sample/router" />
             <option value="$PROJECT_DIR$/stitch-anno" />
             <option value="$PROJECT_DIR$/stitch-compiler" />
-            <option value="$PROJECT_DIR$/stitch-compiler-test" />
             <option value="$PROJECT_DIR$/stitch-core" />
             <option value="$PROJECT_DIR$/stitch-gradle-plugin" />
           </set>

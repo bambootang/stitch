@@ -5,9 +5,6 @@ import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.res.Configuration;
 
-import bamboo.component.page.PageRegistry;
-import bamboo.component.service.ServiceRegistry;
-
 public interface IComponentLifeCycle extends ComponentCallbacks2 {
 
     /**

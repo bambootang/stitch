@@ -1,21 +1,20 @@
 package bamboo.sample.tasks.component;
 
-import bamboo.component.lifecycle.ComponentApplication;
+import bamboo.component.lifecycle.ComponentLife;
 import bamboo.component.lifecycle.ComponentPriority;
-import bamboo.component.stitch.anno.LifeCycle;
+import bamboo.component.stitch.anno.Component;
 import bamboo.sample.tasks.models.TasksRepository;
 
 /**
  * Created by tangshuai on 2018/3/16.
  */
 
-@LifeCycle
-public class TasksComponentApp extends ComponentApplication {
+@Component
+public class TasksComponentLife extends ComponentLife {
 
     TasksRepository tasksRepository = new TasksRepository();
 
     public void onCreate() {
-
     }
 
     @Override

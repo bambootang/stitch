@@ -1,6 +1,5 @@
-import com.android.builder.core.VariantConfiguration
-
 apply plugin: 'com.android.application'
+
 
 apply plugin: 'stitch.plugin'
 
@@ -14,39 +13,46 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    signingConfigs {
+        signed {
+            storeFile file("${rootDir.absolutePath}/gradle/samplekey.ks")
+            storePassword "samplekey"
+            keyAlias "test"
+            keyPassword "samplekey"
+        }
+    }
     buildTypes {
         release {
             minifyEnabled false
+            signingConfig signingConfigs.signed
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.signed
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-}
 
-afterEvaluate {
-    project.dependencies.modules.each {
-//        println it
-    }
-    project.components.each {
-//        println it
-    }
-    println project.childProjects.size()
-    println project.subprojects.size()
-    println project.dependencies.components.all {
-//        println it
-    }
-//    println project.dependencies.
+    flavorDimensions("one", "two", "three")
 
-    List<String> subPs = new ArrayList<>();
-    project.extensions.android.applicationVariants.all { variant ->
-        Configuration configuration = variant.getCompileConfiguration()
-        DependencySet dependencySet = configuration.getAllDependencies()
-        println dependencySet
-        dependencySet.all {
-            if (it.class.simpleName.contains("DefaultProjectDependency")) {
-                subPs.add(it.name)
-            }
-//            println "${it.class.simpleName.contains("DefaultProjectDependency")}"
-//            println "${it.getGroup()}-${it.name}-${it.version}-${it.class}"
+    productFlavors {
+
+        pre {
+            dimension "one"
+        }
+
+        proc {
+            dimension "two"
+        }
+
+        mock {
+            dimension "three"
+        }
+
+        other {
+            dimension "two"
         }
     }
 
@@ -66,5 +72,6 @@ dependencies {
     implementation project(':sample:router')
     implementation project(':sample:component-account')
     implementation project(':sample:component-tasks')
+    implementation 'bamboo.components.stitch:stitch-core:1.0'
 
 }

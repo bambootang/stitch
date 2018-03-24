@@ -4,7 +4,7 @@ package bamboo.component.page;
 import java.util.HashMap;
 
 
-public final class PageRegistry {
+public final class ActivityRegistry {
 
     final HashMap<String, String> autoLinkMap = new HashMap<>();
 

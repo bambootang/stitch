@@ -8,11 +8,9 @@ import org.junit.runner.RunWith;
 import org.mockito.Mock;
 import org.mockito.junit.MockitoJUnitRunner;
 
-import bamboo.component.service.ServiceRegistry;
-import bamboo.component.lifecycle.ComponentApplication;
+import bamboo.component.lifecycle.ComponentLife;
 import bamboo.component.lifecycle.ComponentLifeRegistry;
 import bamboo.component.lifecycle.ComponentPriority;
-import bamboo.component.page.PageRegistry;
 
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.times;
@@ -25,10 +23,10 @@ import static org.mockito.Mockito.when;
 @RunWith(MockitoJUnitRunner.class)
 public class StitcherHelperTest {
     @Mock
-    public ComponentApplication aApplication;
+    public ComponentLife aApplication;
 
     @Mock
-    public ComponentApplication bApplication;
+    public ComponentLife bApplication;
 
     @Mock
     public Configuration configuration;

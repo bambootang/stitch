@@ -4,19 +4,17 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.view.View;
 import android.widget.TextView;
 
 import bamboo.component.R;
-import bamboo.component.StitcherHelper;
-import bamboo.component.stitch.anno.AutoLink;
+import bamboo.component.stitch.anno.Exported;
 
 
 /**
  * Created by tangshuai on 2018/3/17.
  */
 
-@AutoLink(IntentTestPage.class)
+@Exported(IntentTestPage.class)
 public class IntentTestActivity extends Activity {
 
     private TextView mThisTextView;

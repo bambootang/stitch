@@ -1,12 +1,10 @@
 package bamboo.sample.tasks.models;
 
 import bamboo.component.StitcherHelper;
-import bamboo.component.service.ServiceRegistry;
 import bamboo.component.stitch.anno.Service;
 import bamboo.sample.accountrouter.IAccount;
-import bamboo.sample.tasks.component.TasksComponentApp;
+import bamboo.sample.tasks.component.TasksComponentLife;
 import bamboo.sample.tasksrouter.ITaskComponent;
-import bamboo.sample.tasks.models.TasksRepository;
 
 /**
  * Created by tangshuai on 2018/3/16.
@@ -21,7 +19,7 @@ public class TasksComponentOutput implements ITaskComponent, IAccount {
 
     @Override
     public int getTaskCount() {
-        return StitcherHelper.searchComponentApplication(TasksComponentApp.class).getTasksRepository().getTaskCount();
+        return StitcherHelper.searchComponentApplication(TasksComponentLife.class).getTasksRepository().getTaskCount();
     }
 
     @Override

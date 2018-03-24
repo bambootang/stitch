@@ -7,24 +7,21 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Parcelable;
 
-import java.io.Serializable;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.util.List;
 
 
-public class PageHolder {
+public class ActivityHolder {
 
 
-    public static void start(PageRegistry pageRegistry, ActivityPage page) {
-        startActivityForResult(pageRegistry, page, -1);
+    public static void start(ActivityRegistry activityRegistry, ActivityPage page) {
+        startActivityForResult(activityRegistry, page, -1);
     }
 
-    public static void startActivityForResult(PageRegistry pageRegistry, ActivityPage page, int requestCode) {
+    public static void startActivityForResult(ActivityRegistry activityRegistry, ActivityPage page, int requestCode) {
         if (page == null) {
             throw new IllegalArgumentException("page must not be null");
         }
-        startActivityForRegistry(pageRegistry, page, requestCode);
+        startActivityForRegistry(activityRegistry, page, requestCode);
     }
 
     private static boolean isIntentAvailable(Context context, Intent intent) {
@@ -40,9 +37,9 @@ public class PageHolder {
         return list.size() > 0;
     }
 
-    private static void startActivityForRegistry(PageRegistry pageRegistry, ActivityPage page, int requestCode) {
+    private static void startActivityForRegistry(ActivityRegistry activityRegistry, ActivityPage page, int requestCode) {
         assert page == null;
-        String activityClass = pageRegistry.search(page.getClass().getName());
+        String activityClass = activityRegistry.search(page.getClass().getName());
         if (activityClass == null) {
             System.err.println("无效的页面跳转");
             return;

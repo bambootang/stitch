@@ -6,9 +6,8 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.View;
 
-import bamboo.component.ArchitectureHelper;
-import bamboo.component.pagerouter.ActivityRouterHolder;
-import bamboo.sample.tasks.ui.TaskCountActivity;
+import bamboo.component.StitcherHelper;
+import bamboo.sample.tasks.ui.paramersample.TaskCountActivity;
 import bamboo.sample.tasksrouter.TaskInfoPage;
 
 /**
@@ -21,7 +20,7 @@ public class TestActivity extends Activity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.tasks_activity_test);
-        ArchitectureHelper.onCreateDelay();
+        StitcherHelper.onCreateDelay();
     }
 
 
@@ -30,6 +29,6 @@ public class TestActivity extends Activity {
     }
 
     public void onTaskInfo(View view) {
-        ActivityRouterHolder.start(new TaskInfoPage(this, "testId-" + System.currentTimeMillis()));
+        StitcherHelper.start(new TaskInfoPage(this, "testId-" + System.currentTimeMillis()));
     }
 }

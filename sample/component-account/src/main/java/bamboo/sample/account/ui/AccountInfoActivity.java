@@ -5,7 +5,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.widget.TextView;
 
-import bamboo.component.stitch.anno.AutoLink;
+import bamboo.component.stitch.anno.Exported;
 import bamboo.sample.account.R;
 import bamboo.sample.account.component.ComponentInput;
 import bamboo.sample.account.models.AccountRepository;
@@ -14,7 +14,7 @@ import bamboo.sample.accountrouter.AccountInfoPage;
 /**
  * Created by tangshuai on 2018/3/16.
  */
-@AutoLink(AccountInfoPage.class)
+@Exported(AccountInfoPage.class)
 public class AccountInfoActivity extends Activity {
 
     private TextView mUserTextView;
