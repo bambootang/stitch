@@ -6,9 +6,7 @@ Android组件化开发框架
 ```groovy
 buildscript {
     repositories {
-        maven {
-            url "https://dl.bintray.com/bamboo/bamboo/"
-        }
+        jcenter() //stitch发布在这里面
         ...
     }
     dependencies {
