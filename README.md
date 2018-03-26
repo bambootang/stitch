@@ -1,6 +1,31 @@
 # stitch
 Android组件化开发框架
 
+### 依赖
+在项目根目录的build.gradle文件中添加classpath依赖
+```groovy
+buildscript {
+    repositories {
+        maven {
+            url "https://dl.bintray.com/bamboo/bamboo/"
+        }
+        ...
+    }
+    dependencies {
+        ...
+        classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.0'
+    }
+}
+```
+在需要使用stitch的module的build.gradle文件中加入：
+```groovy
+//apply plugin: 'com.android.application'
+//apply plugin: 'com.android.library'
+//需要放在android的plugin后面
+apply plugin: 'stitch.plugin'
+```
+
+
 ### @Component、ComponentLife
 ```ComponentLife```类是组件生命周期代理基类，我们通过继承```ComponentLife```类并使用```@Component```进行标记，即可将我们的组件注入到stitch中。
 
