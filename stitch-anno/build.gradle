@@ -1,6 +1,7 @@
 apply plugin: 'java-library'
 
 group = "bamboo.components.stitch"
+version = rootProject.ext.stitchVersion
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }

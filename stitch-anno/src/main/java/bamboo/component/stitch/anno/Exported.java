@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 标记为外部可访问的Activity
  */
 @Retention(RetentionPolicy.CLASS)
-@Target(ElementType.TYPE)
+@Target({ElementType.TYPE, ElementType.METHOD})
 public @interface Exported {
 
     /**

@@ -7,6 +7,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.os.Parcelable;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.List;
 
 
@@ -38,7 +40,19 @@ public class ActivityHolder {
     }
 
     private static void startActivityForRegistry(ActivityRegistry activityRegistry, ActivityPage page, int requestCode) {
-        assert page == null;
+        assert page != null;
+        page.setRequestCode(requestCode);
+        Method method = activityRegistry.searchMethod(page.getClass().getName());
+        if (method != null) {
+            try {
+                method.invoke(null, page);
+                return;
+            } catch (IllegalAccessException e) {
+                e.printStackTrace();
+            } catch (InvocationTargetException e) {
+                e.printStackTrace();
+            }
+        }
         String activityClass = activityRegistry.search(page.getClass().getName());
         if (activityClass == null) {
             System.err.println("无效的页面跳转");
@@ -70,5 +84,25 @@ public class ActivityHolder {
         } else {
             page.context.startActivity(intent);
         }
+    }
+
+    public static Intent pack(ActivityRegistry activityRegistry, ActivityPage page) {
+
+        Intent intent = page.getTargetIntent() != null ? page.getTargetIntent() : new Intent();
+
+        String activityClass = activityRegistry.search(page.getClass().getName());
+        if (activityClass != null) {
+            intent.setClassName(page.context, activityClass);
+        }
+        if (page instanceof Parcelable) {
+            intent.putExtra(page.getClass().getSimpleName(), (Parcelable) page);
+        } else {
+            try {
+                intent.putExtra(page.getClass().getSimpleName(), page);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return intent;
     }
 }

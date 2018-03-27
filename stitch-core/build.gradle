@@ -1,6 +1,7 @@
 apply plugin: 'com.android.library'
 
 group = "bamboo.components.stitch"
+version = rootProject.ext.stitchVersion
 android {
     compileSdkVersion 26
 

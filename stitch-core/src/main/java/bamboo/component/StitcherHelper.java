@@ -3,6 +3,7 @@ package bamboo.component;
 
 import android.app.Application;
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.Configuration;
 
 import bamboo.component.lifecycle.ComponentLife;
@@ -21,8 +22,14 @@ public final class StitcherHelper {
 
     private static ServiceRegistry outputRouterRegistry = new ServiceRegistry();
 
+    private static Application applicatoin;
+
     private StitcherHelper() {
 
+    }
+
+    public Application getApplicatoin() {
+        return applicatoin;
     }
 
     static void setComponentLifeRegistry(ComponentLifeRegistry componentLifeRegistry) {
@@ -35,6 +42,7 @@ public final class StitcherHelper {
      * @param application
      */
     public static void init(Application application) {
+        StitcherHelper.applicatoin = application;
         componentLifeRegistry.registerFromManifest(application);
         registerComponent();
     }
@@ -141,6 +149,16 @@ public final class StitcherHelper {
             componentLife.onConfigurationChanged(newConfig);
         }
     }
+
+    /**
+     * 将ActivitPage包装成Intent返回
+     *
+     * @param page
+     */
+    public static Intent pack(ActivityPage page) {
+        return ActivityHolder.pack(activityRegistry, page);
+    }
+
 
     /**
      * 启动某个页面

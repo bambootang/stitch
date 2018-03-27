@@ -2,11 +2,11 @@ apply plugin: 'java-gradle-plugin'
 apply plugin: 'groovy'
 
 group = "bamboo.components.stitch"
-version = '1.0'
+version = rootProject.ext.stitchVersion
 dependencies {
     compileOnly gradleApi()
     compile localGroovy()
-    compile 'com.android.tools.build:gradle:3.0.1'
+    compileOnly 'com.android.tools.build:gradle:3.0.1'
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 }
 

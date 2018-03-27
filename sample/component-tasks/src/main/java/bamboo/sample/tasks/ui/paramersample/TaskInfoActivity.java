@@ -13,7 +13,7 @@ import bamboo.sample.tasksrouter.TaskInfoPage;
  * Created by tangshuai on 2018/3/17.
  */
 
-@Exported(TaskInfoPage.class)
+//@Exported(TaskInfoPage.class)
 public class TaskInfoActivity extends Activity {
 
     private TextView mTaskIdTextView;

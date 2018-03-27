@@ -25,6 +25,8 @@ public abstract class ActivityPage implements Serializable {
 
     private transient Intent targetIntent;
 
+    private int requestCode = -1;
+
     public ActivityPage(Context context) {
         this.context = context;
     }
@@ -40,6 +42,14 @@ public abstract class ActivityPage implements Serializable {
 
     public void setTargetIntent(Intent targetIntent) {
         this.targetIntent = targetIntent;
+    }
+
+    public void setRequestCode(int requestCode) {
+        this.requestCode = requestCode;
+    }
+
+    public int getRequestCode() {
+        return this.requestCode;
     }
 
 }

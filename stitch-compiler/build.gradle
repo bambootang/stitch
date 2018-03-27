@@ -2,6 +2,7 @@ apply plugin: 'java-library'
 
 
 group = "bamboo.components.stitch"
+version = rootProject.ext.stitchVersion
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
@@ -12,6 +13,5 @@ dependencies {
     sourceCompatibility = JavaVersion.VERSION_1_7
     targetCompatibility = JavaVersion.VERSION_1_7
 }
-
 
 //apply from: "${rootProject.rootDir}/gradle/java_publish.gradle"

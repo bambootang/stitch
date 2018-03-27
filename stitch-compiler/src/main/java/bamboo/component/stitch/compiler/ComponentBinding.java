@@ -28,6 +28,7 @@ public class ComponentBinding {
 
     ImmutableList<ServiceBinding> serviceBindings;
     ImmutableList<ActivityBinding> activityBindings;
+    ImmutableList<MethodBinding> methodBindings;
 
     public String getBindingClassName() {
         return (modulePackageId == null ? componentImpPackage : modulePackageId) + "." + moduleName + "_ComponentBinding";
@@ -65,7 +66,7 @@ public class ComponentBinding {
     public String getBindingCode() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(TAB_SPACE + "public void register(ServiceRegistry serviceRegistry, ActivityRegistry activityRegistry) {\n\n");
-        if (serviceBindings != null) {
+        if (serviceBindings != null && serviceBindings.size() > 0) {
             //define service object
             HashSet<String> objectName = new HashSet<>();//解决重名
             for (ServiceBinding service : serviceBindings) {
@@ -80,17 +81,37 @@ public class ComponentBinding {
                 stringBuilder.append(String.format("new %s();\n", service.implementClass));
             }
             for (ServiceBinding service : serviceBindings) {
-                stringBuilder.append(String.format(TAB_SPACE_DOUBLE + "serviceRegistry.register(%s, %s);\n\n"
+                stringBuilder.append(String.format(TAB_SPACE_DOUBLE + "serviceRegistry.register(%s, %s);\n"
                         , service.interfaceClass + ".class"
                         , service.implementClass.replace(".", "_").toLowerCase()));
             }
+            stringBuilder.append("\n");
         }
-        if (activityBindings != null) {
+        if (activityBindings != null && activityBindings.size() > 0) {
             for (ActivityBinding page : activityBindings) {
-                stringBuilder.append(String.format(TAB_SPACE_DOUBLE + "activityRegistry.register(\"%s\",\"%s\");\n\n"
+                stringBuilder.append(String.format(TAB_SPACE_DOUBLE + "activityRegistry.register(\"%s\",\"%s\");\n"
                         , page.pageLink
                         , page.targetActivity));
             }
+            stringBuilder.append("\n");
+        }
+        if (methodBindings != null && methodBindings.size() > 0) {
+            for (MethodBinding page : methodBindings) {
+                stringBuilder.append(TAB_SPACE_DOUBLE + "try {\n");
+                stringBuilder.append(String.format(TAB_SPACE_TREBLE + "java.lang.reflect.Method %s \n"
+                                + TAB_SPACE + TAB_SPACE_TREBLE + "= %s.class.getMethod(\"%s\",%s.class);\n"
+                        , page.pageLink.replace(".", "_")
+                        , page.targetClassName
+                        , page.targetMethodName
+                        , page.pageLink));
+                stringBuilder.append(String.format(TAB_SPACE_TREBLE + "activityRegistry.register(\"%s\",%s);\n"
+                        , page.pageLink
+                        , page.pageLink.replace(".", "_")));
+                stringBuilder.append(TAB_SPACE_DOUBLE + "} catch (NoSuchMethodException e) {\n" +
+                        TAB_SPACE_TREBLE + "e.printStackTrace();\n" +
+                        TAB_SPACE_DOUBLE + "}");
+            }
+            stringBuilder.append("\n");
         }
 
         stringBuilder.append(TAB_SPACE + "}\n\n");

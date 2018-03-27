@@ -13,8 +13,8 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
 
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.2'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
 
         classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.0'
 
@@ -107,6 +107,7 @@ subprojects { subp ->
 
 
 ext {
+    stitchVersion = '1.0'
     versionName = "1.0"
     versionCode = 100
     compileSdkVersion = 26
