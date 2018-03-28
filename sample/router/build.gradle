@@ -1,5 +1,6 @@
 apply plugin: 'com.android.library'
 
+group = "bamboo.sample"
 version = "1.0"
 
 android {
@@ -47,5 +48,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-    implementation 'bamboo.components.stitch:stitch-core:1.0'
+    implementation "bamboo.components.stitch:stitch-core:1.0"
 }
+
+apply from: "$rootDir.absolutePath/gradle/native_maven.gradle"

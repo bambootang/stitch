@@ -68,22 +68,22 @@ public class ComponentBinding {
         stringBuilder.append(TAB_SPACE + "public void register(ServiceRegistry serviceRegistry, ActivityRegistry activityRegistry) {\n\n");
         if (serviceBindings != null && serviceBindings.size() > 0) {
             //define service object
-            HashSet<String> objectName = new HashSet<>();//解决重名
+//            HashSet<String> objectName = new HashSet<>();//解决重名
+//            for (ServiceBinding service : serviceBindings) {
+//                if (objectName.contains(service.implementClass)) {
+//                    continue;
+//                }
+//                objectName.add(service.implementClass);
+//                stringBuilder.append(TAB_SPACE_DOUBLE + service.implementClass);
+//                stringBuilder.append(" ");
+//                stringBuilder.append(service.implementClass.replace(".", "_").toLowerCase());
+//                stringBuilder.append(" = ");
+//                stringBuilder.append(String.format("new %s();\n", service.implementClass));
+//            }
             for (ServiceBinding service : serviceBindings) {
-                if (objectName.contains(service.implementClass)) {
-                    continue;
-                }
-                objectName.add(service.implementClass);
-                stringBuilder.append(TAB_SPACE_DOUBLE + service.implementClass);
-                stringBuilder.append(" ");
-                stringBuilder.append(service.implementClass.replace(".", "_").toLowerCase());
-                stringBuilder.append(" = ");
-                stringBuilder.append(String.format("new %s();\n", service.implementClass));
-            }
-            for (ServiceBinding service : serviceBindings) {
-                stringBuilder.append(String.format(TAB_SPACE_DOUBLE + "serviceRegistry.register(%s, %s);\n"
+                stringBuilder.append(String.format(TAB_SPACE_DOUBLE + "serviceRegistry.register(%s,\"%s\");\n"
                         , service.interfaceClass + ".class"
-                        , service.implementClass.replace(".", "_").toLowerCase()));
+                        , service.implementClass));
             }
             stringBuilder.append("\n");
         }

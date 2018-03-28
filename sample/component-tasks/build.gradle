@@ -17,3 +17,5 @@ dependencies {
     implementation project(":sample:router")
 
 }
+
+apply from: "$rootDir.absolutePath/gradle/native_maven.gradle"
