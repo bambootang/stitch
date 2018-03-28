@@ -32,8 +32,7 @@ dependencies {
     androidTestImplementation 'com.android.support.test:runner:1.0.1'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
-//    compile project(":stitch-anno")
-    implementation "bamboo.components.stitch:stitch-anno:$rootProject.ext.stitchVersion"
+    compile project(":stitch-anno")
 }
 
 apply from: "${rootProject.rootDir}/gradle/native_maven.gradle"
