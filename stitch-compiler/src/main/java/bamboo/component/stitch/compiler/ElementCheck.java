@@ -191,4 +191,11 @@ public class ElementCheck {
         }
 
     }
+
+    static void checkTopLevel(TypeElement e) {
+        Element element = e.getEnclosingElement();
+        if (element.getKind() != ElementKind.PACKAGE) {
+            throw new IllegalStateException("@Component error: " + e.getQualifiedName() + " can not be inner class!");
+        }
+    }
 }

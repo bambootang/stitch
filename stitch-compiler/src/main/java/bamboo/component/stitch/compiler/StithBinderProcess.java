@@ -179,6 +179,7 @@ public final class StithBinderProcess extends AbstractProcessor {
         for (Element e : elements) {
             ElementCheck.checkExtendsComponentLife(processingEnv, (TypeElement) e);
             ElementCheck.checkModifiers((TypeElement) e, Modifier.PUBLIC);
+            ElementCheck.checkTopLevel((TypeElement) e);
             ElementCheck.checkNoneModifiers((TypeElement) e, Modifier.STATIC);
             ElementCheck.checkNoneModifiers((TypeElement) e, Modifier.FINAL);
             binding.componentImpPackage = "" + e.getEnclosingElement();
