@@ -3,8 +3,11 @@
 buildscript {
 
     repositories {
+//        maven {
+//            url rootDir.absolutePath + File.separator + '.repo'
+//        }
         maven {
-            url rootDir.absolutePath + File.separator + '.repo'
+            url 'https://raw.githubusercontent.com/bambootang/maven/master'
         }
         google()
         jcenter()
@@ -26,8 +29,11 @@ buildscript {
 allprojects {
 
     repositories {
+//        maven {
+//            url rootDir.absolutePath + File.separator + '.repo'
+//        }
         maven {
-            url rootDir.absolutePath + File.separator + '.repo'
+            url 'https://raw.githubusercontent.com/bambootang/maven/master'
         }
         google()
         jcenter()

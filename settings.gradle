@@ -17,7 +17,8 @@ includes.each {
     include it
 }
 
-include ':sample:app', ':compiler-test'
+include ':sample:app'
+//        ':compiler-test'
 include ':sample:component-account'
 include ':sample:component-tasks'
 include ':sample:router'

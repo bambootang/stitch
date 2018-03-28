@@ -98,7 +98,4 @@ android {
     }
 }
 
-dependencies {
-    api 'bamboo.components.stitch:stitch-core:1.0'
-}
 
