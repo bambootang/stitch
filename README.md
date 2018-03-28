@@ -6,12 +6,25 @@ Android组件化开发框架
 ```groovy
 buildscript {
     repositories {
-        jcenter() //stitch发布在这里面
+        //stitch发布在这里面
+        maven {
+            url 'https://raw.githubusercontent.com/bambootang/maven/master'
+        }
         ...
     }
     dependencies {
         ...
         classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.1'
+    }
+}
+
+allprojects {
+
+    repositories {
+        maven {
+            url 'https://raw.githubusercontent.com/bambootang/maven/master'
+        }
+        ...
     }
 }
 ```
