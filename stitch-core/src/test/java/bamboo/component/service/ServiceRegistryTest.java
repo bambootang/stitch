@@ -9,28 +9,34 @@ import static org.junit.Assert.*;
  */
 public class ServiceRegistryTest {
 
-    private class ComponentOutputA {
+
+    public static class ComponentOutputA {
 
     }
 
-    private class ComponentOutputB {
+    public static class ComponentOutputB {
 
     }
 
-    ServiceRegistry serviceRegistry = new ServiceRegistry();
+    private ServiceRegistry serviceRegistry = new ServiceRegistry();
 
     @Test
     public void registerComponentOutput() {
 
-        ComponentOutputA componentOutputA = new ComponentOutputA();
-        ComponentOutputB componentOutputB = new ComponentOutputB();
-        serviceRegistry.register(ComponentOutputA.class, componentOutputA);
-        serviceRegistry.register(ComponentOutputB.class, componentOutputB);
-        serviceRegistry.register(ComponentOutputB.class, componentOutputB);
+        serviceRegistry.register(ComponentOutputA.class, ComponentOutputA.class);
+        serviceRegistry.register(ComponentOutputB.class, ComponentOutputB.class);
+        serviceRegistry.register(ComponentOutputB.class, ComponentOutputB.class);
         assertEquals(serviceRegistry.serviceMap.size(), 2);
 
-        assertEquals(serviceRegistry.search(ComponentOutputA.class), componentOutputA);
-        assertEquals(serviceRegistry.search(ComponentOutputB.class), componentOutputB);
+        ComponentOutputA componentOutputA1 = serviceRegistry.search(ComponentOutputA.class);
+        ComponentOutputA componentOutputA2 = serviceRegistry.search(ComponentOutputA.class);
+
+        ComponentOutputB componentOutputB1 = serviceRegistry.search(ComponentOutputB.class);
+        ComponentOutputB componentOutputB2 = serviceRegistry.search(ComponentOutputB.class);
+
+        assertEquals(componentOutputA1, componentOutputA2);
+        assertEquals(componentOutputB1, componentOutputB2);
+
     }
 
 }

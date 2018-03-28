@@ -35,17 +35,15 @@ public class StitcherHelperTest {
 
     @Before
     public void _start() {
-        when(aApplication.level()).thenReturn(ComponentPriority.LEVEL_HIGH);
-        when(bApplication.level()).thenReturn(ComponentPriority.LEVEL_LOW);
     }
 
 
     @Test
     public void lifeCycleInvoke() {
-        componentLifeRegistry.register(aApplication);
-        componentLifeRegistry.register(aApplication);
-        componentLifeRegistry.register(aApplication);
-        componentLifeRegistry.register(bApplication);
+        componentLifeRegistry.register("aApplication", aApplication);
+        componentLifeRegistry.register("aApplication", aApplication);
+        componentLifeRegistry.register("aApplication", aApplication);
+        componentLifeRegistry.register("bApplication", bApplication);
         StitcherHelper.setComponentLifeRegistry(componentLifeRegistry);
 
         StitcherHelper.onCreate();
