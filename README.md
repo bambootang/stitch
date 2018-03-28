@@ -11,7 +11,7 @@ buildscript {
     }
     dependencies {
         ...
-        classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.0'
+        classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.1'
     }
 }
 ```
@@ -126,6 +126,27 @@ public class TestPage extends ActivityPage implements Parcelable {
 }
 ```
 
+### @Intercept
+@Intercept用来作为@Exported的补充，在某些情况下，Module对外公开的是一个页面入口，但是在不同的条件下可能该入口打开的页面并不是同一个。
+
+```java
+public class InterceptTest{
+    
+    @Intercept
+    public static void receive(TestPage page){
+        if(AppUtils.isHuaweiChannel()){
+            Intent intent = StitcherHelper.pack(page);
+            intent.setClass(page.context, TestActivityA.class);
+            page.context.startActivity(intent);
+        } else {
+            Intent intent = StitcherHelper.pack(page);
+            intent.setClass(page.context, TestActivity.class);
+            page.context.startActivity(intent);
+        }
+    }
+}
+```
+
 ### @Service
 ```@Service```注解用于向stitch中注入Module对外公开的实现接口。
 
@@ -136,7 +157,7 @@ public interface ITestService {
     String getTestText();
 }
 
-// 2. 在 Module 中创建 TestServiceImp.java 并实现 ITestService
+// 2. 在 ModuleA 中创建 TestServiceImp.java 并实现 ITestService
 @Service
 public class TestServiceImp implements ITestService {
     public String getTestText() {
