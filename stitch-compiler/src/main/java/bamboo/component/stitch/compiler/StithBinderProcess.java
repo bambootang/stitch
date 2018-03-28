@@ -5,6 +5,8 @@ import com.google.common.collect.ImmutableList;
 
 import java.io.IOException;
 import java.io.Writer;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
@@ -19,13 +21,16 @@ import javax.lang.model.element.AnnotationMirror;
 import javax.lang.model.element.AnnotationValue;
 import javax.lang.model.element.Element;
 import javax.lang.model.element.ExecutableElement;
+import javax.lang.model.element.Modifier;
 import javax.lang.model.element.TypeElement;
 import javax.lang.model.type.TypeMirror;
+import javax.lang.model.util.Types;
 import javax.tools.JavaFileObject;
 import javax.tools.StandardLocation;
 
 import bamboo.component.stitch.anno.Exported;
 import bamboo.component.stitch.anno.Component;
+import bamboo.component.stitch.anno.Intercept;
 import bamboo.component.stitch.anno.Service;
 
 
@@ -39,9 +44,12 @@ public final class StithBinderProcess extends AbstractProcessor {
 
     bamboo.component.stitch.compiler.ComponentBinding binding = new bamboo.component.stitch.compiler.ComponentBinding();
 
+    Types types;
+
     @Override
     public synchronized void init(ProcessingEnvironment processingEnv) {
         super.init(processingEnv);
+        types = processingEnv.getTypeUtils();
     }
 
     @Override
@@ -52,10 +60,13 @@ public final class StithBinderProcess extends AbstractProcessor {
         processServiceAnnotaion(serviceElements);
         Set<? extends Element> pageElements = roundEnv.getElementsAnnotatedWith(Exported.class);
         processPageAnnotation(pageElements);
+        Set<? extends Element> interceptElements = roundEnv.getElementsAnnotatedWith(Intercept.class);
+        processPageInterceptAnnotation(interceptElements);
         if (lifeElements.size() != 0 || serviceElements.size() != 0 || pageElements.size() != 0)
             writeComponentBinding();
         return true;
     }
+
 
     private void writeComponentBinding() {
         try {
@@ -109,6 +120,7 @@ public final class StithBinderProcess extends AbstractProcessor {
         types.add(Component.class.getCanonicalName());
         types.add(Exported.class.getCanonicalName());
         types.add(Service.class.getCanonicalName());
+        types.add(Intercept.class.getCanonicalName());
         return types;
     }
 
@@ -116,7 +128,9 @@ public final class StithBinderProcess extends AbstractProcessor {
         ImmutableList.Builder<ActivityBinding> pageBindingBuilder = ImmutableList.builder();
         for (Element e : pageElements) {
             TypeElement element = (TypeElement) e;
+            ElementCheck.checkExtendsActivity(processingEnv, element);
             Object linkClass = getAutoLink(element);
+            ElementCheck.checkExtendsActivityPage(processingEnv, element, processingEnv.getElementUtils().getTypeElement(linkClass.toString()));
             ActivityBinding activityBinding = new ActivityBinding();
             activityBinding.pageLink = linkClass.toString();
             activityBinding.targetActivity = element.getQualifiedName().toString();
@@ -125,12 +139,49 @@ public final class StithBinderProcess extends AbstractProcessor {
         binding.activityBindings = pageBindingBuilder.build();
     }
 
+    private void processPageInterceptAnnotation(Set<? extends Element> interceptElements) {
+        ImmutableList.Builder<MethodBinding> pageBindingBuilder = ImmutableList.builder();
+
+        for (Element e : interceptElements) {
+            ExecutableElement element = (ExecutableElement) e;
+            ElementCheck.checkModifiers(element, Modifier.PUBLIC);
+            ElementCheck.checkModifiers(element, Modifier.STATIC);
+            ElementCheck.checkModifiers((TypeElement) (element.getEnclosingElement()), Modifier.PUBLIC);
+            ElementCheck.checkParamerSize(element, 1);
+            ElementCheck.checkExtendsActivityPage(processingEnv, element);
+            MethodBinding methodBinding = new MethodBinding();
+            methodBinding.pageLink = element.getParameters().get(0).asType().toString();
+            TypeElement classElement = (TypeElement) element.getEnclosingElement();
+            methodBinding.targetClassName = classElement.getQualifiedName().toString();
+            methodBinding.targetMethodName = element.getSimpleName().toString();
+            pageBindingBuilder.add(methodBinding);
+        }
+        binding.methodBindings = pageBindingBuilder.build();
+        Set<String> intercepts = new HashSet<>();
+        for (MethodBinding methodBinding : binding.methodBindings) {
+            if (intercepts.contains(methodBinding.pageLink)) {
+                throw new IllegalStateException("duplicate " + methodBinding.pageLink + " @Intercept");
+            }
+            intercepts.add(methodBinding.pageLink);
+        }
+    }
+
 
     private void processLifeCycle(Set<? extends Element> elements) {
         if (elements.size() > 1) {
-            throw new IllegalArgumentException("duplicate Component.");
+            StringBuilder sb = new StringBuilder("one Module just need one ComponentLife.");
+            for (Element element : elements) {
+                sb.append("\n");
+                sb.append(element.toString());
+            }
+            throw new IllegalArgumentException(sb.toString());
         }
         for (Element e : elements) {
+            ElementCheck.checkExtendsComponentLife(processingEnv, (TypeElement) e);
+            ElementCheck.checkModifiers((TypeElement) e, Modifier.PUBLIC);
+            ElementCheck.checkTopLevel((TypeElement) e);
+            ElementCheck.checkNoneModifiers((TypeElement) e, Modifier.STATIC);
+            ElementCheck.checkNoneModifiers((TypeElement) e, Modifier.FINAL);
             binding.componentImpPackage = "" + e.getEnclosingElement();
             binding.componentName = e.getSimpleName().toString();
         }
@@ -141,7 +192,9 @@ public final class StithBinderProcess extends AbstractProcessor {
         ImmutableList.Builder<ServiceBinding> serviceBindings = ImmutableList.builder();
         for (Element e : elements) {
             TypeElement typeElement = (TypeElement) e;
+            ElementCheck.checkHasEmptyConstructor(typeElement);
             List classes = getInterfaces(typeElement);
+            ElementCheck.checkServiceInterfaceMatch(processingEnv, typeElement, classes);
             if (classes != null) {
                 for (Object o : classes) {
                     ServiceBinding serviceBinding = new ServiceBinding();
@@ -151,7 +204,13 @@ public final class StithBinderProcess extends AbstractProcessor {
                     serviceBindings.add(serviceBinding);
                 }
             } else {
-                List<TypeMirror> interfaces = (List<TypeMirror>) typeElement.getInterfaces();
+                List<TypeMirror> interfaces = new ArrayList<>();
+                interfaces.addAll(typeElement.getInterfaces());
+                TypeElement tmpTypeElement = typeElement;
+                while (!tmpTypeElement.getSuperclass().toString().equals("java.lang.Object")) {
+                    tmpTypeElement = processingEnv.getElementUtils().getTypeElement(tmpTypeElement.getSuperclass().toString());
+                    interfaces.addAll(tmpTypeElement.getInterfaces());
+                }
                 for (TypeMirror typeMirror : interfaces) {
                     ServiceBinding serviceBinding = new ServiceBinding();
                     String oClassName = typeMirror.toString();

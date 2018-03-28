@@ -5,7 +5,10 @@ import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.mockito.junit.MockitoJUnitRunner;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
 
 import static org.hamcrest.core.Is.is;
 import static org.junit.Assert.*;
@@ -26,23 +29,25 @@ public class ComponentLifeRegistryTest {
      */
     @Test
     public void aisbeforB() {
-        componentLifeRegistry.register(aApplication);
-        componentLifeRegistry.register(aApplication);
-        componentLifeRegistry.register(aApplication);
-        componentLifeRegistry.register(bApplication);
-        componentLifeRegistry.register(bApplication);
-        componentLifeRegistry.register(bApplication);
-        Collection<ComponentLife> applications = componentLifeRegistry.getAll();
-        assertEquals(applications.size(), 2);
-        assertEquals(applications.toArray()[0], aApplication);
-        assertEquals(applications.toArray()[1], bApplication);
+        componentLifeRegistry.register("aApplication", aApplication);
+        componentLifeRegistry.register("aApplication", aApplication);
+        componentLifeRegistry.register("aApplication", aApplication);
+        componentLifeRegistry.register("bApplication", bApplication);
+        componentLifeRegistry.register("bApplication", bApplication);
+        componentLifeRegistry.register("bApplication", bApplication);
+        Iterable<ComponentLife> applications = componentLifeRegistry.getAll();
+        Iterator<ComponentLife> iterator = applications.iterator();
+        assertTrue(iterator.hasNext());
+        assertEquals(iterator.next(), aApplication);
+        assertEquals(iterator.next(), bApplication);
+        assertTrue(!iterator.hasNext());
     }
 
     @Test
-    public void lifeCycleInvoke(){
+    public void lifeCycleInvoke() {
         aApplication = Mockito.mock(MockComponentALife.class);
         bApplication = Mockito.mock(MockComponentBLife.class);
-        componentLifeRegistry.register(aApplication);
-        componentLifeRegistry.register(bApplication);
+        componentLifeRegistry.register("aApplication", aApplication);
+        componentLifeRegistry.register("bApplication", bApplication);
     }
 }

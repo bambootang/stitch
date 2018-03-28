@@ -13,10 +13,10 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:3.0.1'
 
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.4'
-        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.4.1'
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.2'
+        classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
 
-        classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.0'
+        classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.1'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -24,8 +24,6 @@ buildscript {
 }
 
 allprojects {
-
-    apply plugin: 'maven'
 
     repositories {
         maven {
@@ -38,75 +36,8 @@ allprojects {
 
 
 
-subprojects { subp ->
-    if (subp.group.toString().startsWith(rootProject.name)) {
-        subp.group = 'bamboo.sample'
-    }
-    if ((subp.version + '').equals('unspecified')) {
-        subp.version = "1.0"
-    }
-    subp.afterEvaluate {
-
-        if (subp.plugins.hasPlugin('com.android.library')
-                && !subp.plugins.hasPlugin("com.android.application")) {
-            android.libraryVariants.all { variant ->
-                if (variant.name.equals('release')) {
-                    //android工程
-                    //生成source 以及 doc文件，如果要发到远程仓库必须要这个东西
-                    def generateandroidJavadocs = task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
-//                            source = variant.javaCompile.source
-                        source = android.sourceSets.main.java.sourceFiles;
-                        classpath += files(variant.javaCompile.classpath.files, project.android.getBootClasspath())
-                        classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-//                            classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
-                        exclude '**/BuildConfig.java'
-                        exclude '**/R.java'
-                    }
-//
-                    def generateandroidJavadocsJar = task("generate${variant.name.capitalize()}JavadocsJar", type: Jar, dependsOn: generateandroidJavadocs) {
-                        classifier = 'javadoc'
-                        from generateandroidJavadocs.destinationDir
-                    }
-
-                    def generateandroidSourcesJar = task("generate${variant.name.capitalize()}SourcesJar", type: Jar) {
-                        classifier = 'sources'
-                        from android.sourceSets.main.java.sourceFiles
-                    }
-                    artifacts {
-                        archives generateandroidJavadocsJar
-                        archives generateandroidSourcesJar
-                    }
-                }
-            }
-        } else if (subp.plugins.hasPlugin("java")) {
-            //java工程
-            //生成source 以及 doc文件，如果要发到远程仓库必须要这个东西
-            task('sourcesJar', type: Jar) {
-                from sourceSets.main.java.srcDirs
-                classifier = 'sources'
-            }
-            task('javadocJar', type: Jar, dependsOn: javadoc) {
-                classifier = 'javadoc'
-                from javadoc.destinationDir
-            }
-            artifacts {
-                archives javadocJar
-                archives sourcesJar
-            }
-        }
-        uploadArchives {
-            repositories.mavenDeployer {
-                repository(url: 'file://' + rootDir + File.separator + ".repo")
-                pom.groupId = project.group
-                pom.artifactId = project.name
-                pom.version = project.version
-            }
-        }
-    }
-}
-
-
 ext {
+    stitchVersion = '1.1'
     versionName = "1.0"
     versionCode = 100
     compileSdkVersion = 26

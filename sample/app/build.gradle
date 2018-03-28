@@ -72,6 +72,4 @@ dependencies {
     implementation project(':sample:router')
     implementation project(':sample:component-account')
     implementation project(':sample:component-tasks')
-    implementation 'bamboo.components.stitch:stitch-core:1.0'
-
 }

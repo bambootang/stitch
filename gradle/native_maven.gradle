@@ -1,0 +1,67 @@
+apply plugin: 'maven'
+
+
+if (project.group.toString().startsWith(rootProject.name)) {
+    project.group = 'bamboo.sample'
+}
+if ((project.version + '').equals('unspecified')) {
+    project.version = "1.0"
+}
+afterEvaluate {
+
+    if (project.plugins.hasPlugin('com.android.library')
+            && !project.plugins.hasPlugin("com.android.application")) {
+        project.android.libraryVariants.all { variant ->
+            if (variant.name.equals('release')) {
+                //android工程
+                //生成source 以及 doc文件，如果要发到远程仓库必须要这个东西
+                def generateandroidJavadocs = task("generate${variant.name.capitalize()}Javadoc", type: Javadoc) {
+//                            source = variant.javaCompile.source
+                    source = android.sourceSets.main.java.sourceFiles
+                    classpath += files(variant.javaCompile.classpath.files, project.android.getBootClasspath())
+                    classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+//                            classpath += project.files(android.getBootClasspath().join(File.pathSeparator))
+                    exclude '**/BuildConfig.java'
+                    exclude '**/R.java'
+                }
+//
+                def generateandroidJavadocsJar = task("generate${variant.name.capitalize()}JavadocsJar", type: Jar, dependsOn: generateandroidJavadocs) {
+                    classifier = 'javadoc'
+                    from generateandroidJavadocs.destinationDir
+                }
+
+                def generateandroidSourcesJar = task("generate${variant.name.capitalize()}SourcesJar", type: Jar) {
+                    classifier = 'sources'
+                    from android.sourceSets.main.java.sourceFiles
+                }
+                artifacts {
+                    archives generateandroidJavadocsJar
+                    archives generateandroidSourcesJar
+                }
+            }
+        }
+    } else if (project.plugins.hasPlugin("java")) {
+        //java工程
+        //生成source 以及 doc文件，如果要发到远程仓库必须要这个东西
+        task('sourcesJar', type: Jar) {
+            from sourceSets.main.java.srcDirs
+            classifier = 'sources'
+        }
+        task('javadocJar', type: Jar, dependsOn: javadoc) {
+            classifier = 'javadoc'
+            from javadoc.destinationDir
+        }
+        artifacts {
+            archives javadocJar
+            archives sourcesJar
+        }
+    }
+    uploadArchives {
+        repositories.mavenDeployer {
+            repository(url: 'file://' + rootDir + File.separator + ".repo")
+            pom.groupId = project.group
+            pom.artifactId = project.name
+            pom.version = project.version
+        }
+    }
+}

@@ -10,30 +10,30 @@ apply plugin: "stitch.plugin"
 android {
 
 
-    flavorDimensions("one", "two", "three")
-
-    productFlavors {
-
-        pre {
-            dimension "one"
-        }
-
-        proc {
-            dimension "two"
-        }
-
-        mock {
-            dimension "three"
-        }
-
-        other {
-            dimension "two"
-        }
-
-        other2 {
-            dimension "two"
-        }
-    }
+//    flavorDimensions("one", "two", "three")
+//
+//    productFlavors {
+//
+//        pre {
+//            dimension "one"
+//        }
+//
+//        proc {
+//            dimension "two"
+//        }
+//
+//        mock {
+//            dimension "three"
+//        }
+//
+//        other {
+//            dimension "two"
+//        }
+//
+//        other2 {
+//            dimension "two"
+//        }
+//    }
 }
 
 dependencies {
@@ -45,5 +45,6 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     implementation project(":sample:router")
-    implementation project(":sample:component-tasks")
 }
+
+apply from: "$rootDir.absolutePath/gradle/native_maven.gradle"

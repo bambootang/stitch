@@ -21,8 +21,8 @@ class StitchPlugin implements Plugin<Project> {
 
         try {
             project.dependencies {
-                implementation 'bamboo.components.stitch:stitch-core:1.0'
-                annotationProcessor 'bamboo.components.stitch:stitch-compiler:1.0'
+                implementation 'bamboo.components.stitch:stitch-core:1.1'
+                annotationProcessor 'bamboo.components.stitch:stitch-compiler:1.1'
             }
         } catch (Exception e) {
             e.printStackTrace()
