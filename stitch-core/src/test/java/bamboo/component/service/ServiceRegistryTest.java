@@ -23,9 +23,9 @@ public class ServiceRegistryTest {
     @Test
     public void registerComponentOutput() {
 
-        serviceRegistry.register(ComponentOutputA.class, ComponentOutputA.class);
-        serviceRegistry.register(ComponentOutputB.class, ComponentOutputB.class);
-        serviceRegistry.register(ComponentOutputB.class, ComponentOutputB.class);
+        serviceRegistry.register(ComponentOutputA.class, ComponentOutputA.class.getName());
+        serviceRegistry.register(ComponentOutputB.class, ComponentOutputB.class.getName());
+        serviceRegistry.register(ComponentOutputB.class, ComponentOutputB.class.getName());
         assertEquals(serviceRegistry.serviceMap.size(), 2);
 
         ComponentOutputA componentOutputA1 = serviceRegistry.search(ComponentOutputA.class);
