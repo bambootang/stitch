@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 
+import java.util.List;
+
 import bamboo.component.lifecycle.ComponentLife;
 import bamboo.component.lifecycle.ComponentLifeRegistry;
 import bamboo.component.lifecycle.IComponentLifeCycle;
@@ -22,14 +24,15 @@ public final class StitcherHelper {
 
     private static ServiceRegistry outputRouterRegistry = new ServiceRegistry();
 
-    private static Application applicatoin;
+    private static Application application;
 
     private StitcherHelper() {
 
     }
 
-    public Application getApplicatoin() {
-        return applicatoin;
+
+    public static Application getApplication() {
+        return application;
     }
 
     static void setComponentLifeRegistry(ComponentLifeRegistry componentLifeRegistry) {
@@ -42,7 +45,7 @@ public final class StitcherHelper {
      * @param application
      */
     public static void init(Application application) {
-        StitcherHelper.applicatoin = application;
+        StitcherHelper.application = application;
         componentLifeRegistry.registerFromManifest(application);
         registerComponent();
     }
@@ -77,6 +80,17 @@ public final class StitcherHelper {
      */
     public static <T> T searchService(Class<T> serviceClass) {
         return outputRouterRegistry.search(serviceClass);
+    }
+
+    /**
+     * 获取组件接口的所有实现类
+     *
+     * @param serviceClass 接口class
+     * @param <T>          接口类型
+     * @return 接口的实现类，如果没有注册返回list.size=0
+     */
+    public static synchronized <T> List<T> searchAllServices(Class<T> serviceClass) {
+        return outputRouterRegistry.searchAll(serviceClass);
     }
 
     /**
