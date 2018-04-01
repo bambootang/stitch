@@ -40,6 +40,16 @@ class StitcheTask extends DefaultTask {
 
         String componentBinding = "${packageId}.${toCamlStyle(project.name)}${BindingFileName}"
 
+        boolean hasApplicationNode = false
+        for (Node n : node.children()) {
+            if (n.name() == APPLICATION_NODE) {
+                hasApplicationNode = true
+                break
+            }
+        }
+        if (!hasApplicationNode) {
+            node.appendNode(APPLICATION_NODE)
+        }
         one:
         for (Node n : node.children()) {
             if (n.name() == APPLICATION_NODE) {
