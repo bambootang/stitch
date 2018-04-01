@@ -13,29 +13,50 @@ public class StitcherApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        StitcherHelper.onCreate();
+        onStitchOnCreate();
     }
 
-
-    public void attachBaseContext(Context baseContext) {
+    protected void attachBaseContext(Context baseContext) {
         super.attachBaseContext(baseContext);
-        StitcherHelper.init(this);
-        StitcherHelper.attachBaseContext(baseContext);
+        attachStitchBaseContext(baseContext);
     }
 
 
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-        StitcherHelper.onTrimMemory(level);
+        onStitchTrimMemory(level);
     }
 
     public void onLowMemory() {
         super.onLowMemory();
-        StitcherHelper.onLowMemory();
+        onStitchLowMemory();
     }
 
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
+        onStitchConfigurationChanged(newConfig);
+    }
+
+
+    protected void onStitchOnCreate() {
+        StitcherHelper.onCreate();
+    }
+
+    protected void attachStitchBaseContext(Context baseContext) {
+        StitcherHelper.init(this);
+        StitcherHelper.attachBaseContext(baseContext);
+    }
+
+
+    protected void onStitchTrimMemory(int level) {
+        StitcherHelper.onTrimMemory(level);
+    }
+
+    protected void onStitchLowMemory() {
+        StitcherHelper.onLowMemory();
+    }
+
+    protected void onStitchConfigurationChanged(Configuration newConfig) {
         StitcherHelper.onConfigurationChanged(newConfig);
     }
 
