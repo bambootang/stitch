@@ -17,8 +17,7 @@ includes.each {
     include it
 }
 
-include ':sample:app'
-//        ':compiler-test'
+include ':sample:app', ':compiler-test'
 include ':sample:component-account'
 include ':sample:component-tasks'
 include ':sample:router'
@@ -28,3 +27,6 @@ include ':stitch-anno'
 include ':stitch-compiler'
 include ':stitch-gradle-plugin'
 include ':stitch-core'
+
+include ':stitch-router-compiler'
+include ':stitch-router-anno'

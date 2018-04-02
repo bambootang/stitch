@@ -3,12 +3,12 @@
 buildscript {
 
     repositories {
-//        maven {
-//            url rootDir.absolutePath + File.separator + '.repo'
-//        }
         maven {
-            url 'https://raw.githubusercontent.com/bambootang/maven/master'
+            url rootDir.absolutePath + File.separator + '.repo'
         }
+//        maven {
+//            url 'https://raw.githubusercontent.com/bambootang/maven/master'
+//        }
         google()
         jcenter()
 
@@ -19,7 +19,7 @@ buildscript {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.7.2'
         classpath 'com.github.dcendents:android-maven-gradle-plugin:1.5'
 
-        classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.1'
+        classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.2'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files
@@ -29,12 +29,12 @@ buildscript {
 allprojects {
 
     repositories {
-//        maven {
-//            url rootDir.absolutePath + File.separator + '.repo'
-//        }
         maven {
-            url 'https://raw.githubusercontent.com/bambootang/maven/master'
+            url rootDir.absolutePath + File.separator + '.repo'
         }
+//        maven {
+//            url 'https://raw.githubusercontent.com/bambootang/maven/master'
+//        }
         google()
         jcenter()
     }
@@ -43,7 +43,7 @@ allprojects {
 
 
 ext {
-    stitchVersion = '1.1'
+    stitchVersion = '1.2'
     versionName = "1.0"
     versionCode = 100
     compileSdkVersion = 26
