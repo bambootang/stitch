@@ -10,11 +10,11 @@ import bamboo.component.intenttest.IntentTestPage;
 import bamboo.component.lifecycle.ComponentLife;
 import bamboo.component.paramtest.ParcelableTestPage;
 import bamboo.component.paramtest.SerializableTestPage;
+import bamboo.component.testrouter.ActivityPageManager;
 import bamboo.sample.account.component.AccountComponentLife;
 import bamboo.sample.accountrouter.AccountInfoPage;
 import bamboo.sample.tasks.component.TasksComponentLife;
 import bamboo.sample.tasksrouter.TaskInfoPage;
-import bamboo.sample.tasksrouter.TaskListPage;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -30,15 +30,22 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void onTaskList(View view) {
-        StitcherHelper.start(new TaskListPage(this));
+        ActivityPageManager.newTaskListPage(this)
+                .setRequestCode(1000)
+                .start();
+//        StitcherHelper.start(new TaskListPage(this));
     }
 
     public void onAccountInfo(View view) {
-        StitcherHelper.start(new AccountInfoPage(this));
+        ActivityPageManager.newAccountInfoPage(this).start();
+//        StitcherHelper.start(new AccountInfoPage(this));
     }
 
     public void onTaskInfo(View view) {
-        StitcherHelper.start(new TaskInfoPage(this, "main-" + System.currentTimeMillis()));
+        ActivityPageManager.newTaskInfoPage(this)
+                .setTaskId("main-" + System.currentTimeMillis())
+                .start();
+//        StitcherHelper.start(new TaskInfoPage(this, "main-" + System.currentTimeMillis()));
     }
 
     public void onClearTask(View view) {

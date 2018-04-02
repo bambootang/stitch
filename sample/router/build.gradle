@@ -49,6 +49,10 @@ dependencies {
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.1'
 
     implementation "bamboo.components.stitch:stitch-core:1.1"
+    annotationProcessor 'bamboo.components.stitch:stitch-compiler:1.1'
+
+    implementation project(':stitch-router-anno')
+    annotationProcessor project(':stitch-router-compiler')
 }
 
 apply from: "$rootDir.absolutePath/gradle/native_maven.gradle"

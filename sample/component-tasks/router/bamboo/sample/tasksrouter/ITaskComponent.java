@@ -1,6 +1,9 @@
 package bamboo.sample.tasksrouter;
 
 
+import bamboo.stitch.router.anno.Wrapper;
+
+@Wrapper
 public interface ITaskComponent {
 
     /**

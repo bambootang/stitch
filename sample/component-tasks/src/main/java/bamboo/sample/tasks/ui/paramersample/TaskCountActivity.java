@@ -6,10 +6,15 @@ import android.support.annotation.Nullable;
 import android.view.View;
 import android.widget.TextView;
 
+import java.util.List;
+
 import bamboo.component.StitcherHelper;
 import bamboo.component.stitch.anno.Exported;
+import bamboo.component.testrouter.ActivityPageManager;
+import bamboo.component.testrouter.ServiceManager;
+import bamboo.sample.accountrouter.AccountInfoPage;
+import bamboo.sample.accountrouter.IAccount;
 import bamboo.sample.tasks.R;
-import bamboo.sample.tasks.component.ComponentInput;
 import bamboo.sample.tasks.component.TasksComponentLife;
 import bamboo.sample.tasks.models.TasksRepository;
 import bamboo.sample.tasksrouter.TaskListPage;
@@ -40,8 +45,14 @@ public class TaskCountActivity extends Activity {
     }
 
     private void refreshView() {
-        mUserTextView.setText("userName: " + ComponentInput.get().getUserName());
+        mUserTextView.setText("userName: " + ServiceManager.getUserName());
         mTaskSizeTextView.setText("tasksize: " + tasksRepository.getTaskCount() + "");
+        List<IAccount> iAccounts = StitcherHelper.searchAllServices(IAccount.class);
+        for (IAccount iAccount : iAccounts) {
+            mTaskSizeTextView.append("\n" + iAccount.getUserName());
+            mTaskSizeTextView.append("\n" + iAccount.toString());
+            mTaskSizeTextView.append("\n" + iAccount.getClass());
+        }
     }
 
     public void onTaskAdd(View view) {
