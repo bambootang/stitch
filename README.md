@@ -1,47 +1,42 @@
 # stitch
 Android组件化开发框架
 
-### 依赖
+**stitch**的目标是：简化组件化开发时的module交互时的沟通成本，让开发更容易做正确的事情。
+
+## 功能支持
+0. 不同module都能接收Application的onCreate等生命周期回调进行本module的初始化
+1. 不同module之间的页面跳转，自动打包传递参数
+2. 不同module之间的数据交互，接口参数对开发友好可见
+3. 页面跳转支持所有Intent可配置的参数
+4. 支持页面跳转拦截
+5. 自动绑定并注入到框架
+6. 支持Multdex
+7. 支持单接口多module多实现方案
+
+## 基础依赖
 在项目根目录的build.gradle文件中添加classpath依赖
 ```groovy
 buildscript {
-    repositories {
-        //stitch发布在这里面
-        maven {
-            url 'https://raw.githubusercontent.com/bambootang/maven/master'
-        }
-        ...
-    }
     dependencies {
-        ...
-        classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.1'
+        classpath 'bamboo.components.stitch:stitch-gradle-plugin:1.2'
     }
 }
 
-allprojects {
-
-    repositories {
-        maven {
-            url 'https://raw.githubusercontent.com/bambootang/maven/master'
-        }
-        ...
-    }
-}
 ```
 在需要使用stitch的module的build.gradle文件中加入：
 ```groovy
 //apply plugin: 'com.android.application'
-//apply plugin: 'com.android.library'
-//需要放在android的plugin后面
+apply plugin: 'com.android.library'
+//需要放在android的plugin后面，目前只支持与application及library的plugin共同使用
 apply plugin: 'stitch.plugin'
 ```
 
+## 组件（module）生命周期
 
 ### @Component、ComponentLife
 ```ComponentLife```类是组件生命周期代理基类，我们通过继承```ComponentLife```类并使用```@Component```进行标记，即可将我们的组件注入到stitch中。
 
-每一个Module只允许有1个@Component标注类，如果标注了多个，只会有一个生效。
-
+每一个Module只允许有1个@Component标注类，如果标注了多个，只会有一个生效。一个显然已经满足需求了，^_^
 
 具体使用方法：
 #### 1. 自定义ComponentLife子类
@@ -56,23 +51,32 @@ public class TestComponetLife extends ComponentLife {
     public void onCreate(){
         //TODO 进行需要的初始化操作
     }
-    
-    //可以通过TestComponetLife获取Application对象
-    TestComponetLife  testComponent = StitcherHelper.searchComponentApplication(TestComponetLife.class);
-    Application application = testComponent.getApplication();
+
+    public void attachBaseContext(Context baseContext){
+
+    }
 }
+
+//获取TestComponetLife对象
+TestComponetLife  testComponent = Stitch.searchComponentApplication(TestComponetLife.class);
+//获取Application对象
+Application application = testComponent.getApplication();
+//或者
+Application application = Stitch.getApplication();
 ```
-#### 2. 传递Application生命周期
+#### 2. 生命周期回调
 
-在Application里面我们需要主动传递Application的生命周期给stitch，[stitch](https://github.com/bambootang/stitch)提供了两种实现方式：
+在Application里面我们需要主动传递Application的生命周期给stitch，stitch提供了两种实现方式：
 
-**1.  直接继承StitcherApplication**
+**1.  直接继承StitchApplication**
 
-StitcherApplication继承自Application，只是添加了stitch的生命周期调用
+StitchApplication继承自Application，只是添加了stitch的生命周期调用
 
-**2.  通过StitcherHelper调用组件的生命周期。**
+**2.  通过Stitch调用组件的生命周期。**
 
-如果不能直接继承StitcherApplication，在你自己的Application中主动调用StitcherHelper.onCreate()、StitcherHelper. attachBaseContext()等方法，具体可参考StitcherApplication的实现。
+如果不能直接继承StitchApplication，在你自己的Application中主动调用Stitch.onCreate()、Stitch.attachBaseContext()等方法，具体可参考StitchApplication的实现。
+
+## 页面跳转
 
 ### @Exported、ActivityPage
 ```@Exported```注解用于将Module中的Activity开放给其他Module调用，
@@ -95,34 +99,40 @@ public class TestPage extends ActivityPage{
 }
 
 //2.在ModuleB中启动TestPage，开发ModuleB的人不需要知道TestPage对应到具体哪个页面
-StitcherHelper.start(new TestPage(context,"text test"));
+Stitch.start(new TestPage(context,"text test"));
+//或者使用
+new TestPage(context,"text test").start();
 
 //3.在ModuleA中创建TestActivity并关联TestPage
 @Exported(TestPage.class)
 public class TestActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
        ...
-       //接收页面启动时传递的参数
-       TestPage infoPage = (TestPage) getIntent().getSerializableExtra("TestPage");
+       //接收页面启动时传递的参数,TestPage的simpleClassName为参数key
+       TestPage infoPage = (TestPage) getIntent().getSerializableExtra("TestPage");
        mTestTextView.setText(infoPage.text);
     }
 }
 ```
 
-#### 2. Intent Flag设置
-在页面交互时我们有时会需要对Intent设置Flag，这个时候我们可以通过ActivityPage的targetIntent进行传递，在启动TestActivity时[stitch](https://github.com/bambootang/stitch)会clone targetIntent的所有参数。
+#### 2. Intent Flags等设置
 ```java
 public void onActionTest(View view) {
-    ActionTestPage page = new ActionTestPage(context);
-    Intent targetIntent = new Intent();
-    targetIntent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-    page.setTargetIntent(targetIntent);
-    StitcherHelper.start(page);
+
+    new ActionTestPage(context)
+        .setTargetIntent(new Intent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        .start();
+
+    //如果需要在Activity接收返回值
+    new ActionTestPage(context)
+        .setTargetIntent(new Intent().setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP))
+        .setRequestCode(100)
+        .startForResult();
 }
 ```
 
 #### 3.Activity跳转时的参数传递
-在页面交互时，有时候我们需要往下一个页面传递参数，上面已经提到过Serializable方式，stitch还支持另一种方式：Parcelable
+在页面交互时，有时候我们需要往下一个页面传递参数，stitch默认支持Serializable，同时也支持Parcelable方式
 
 如果你定义的TestPage实现了Parcelable接口，stitch会自动切换为Parcelable方式进行参数传递。
 ```java
@@ -144,25 +154,25 @@ public class TestPage extends ActivityPage implements Parcelable {
 
 ```java
 public class InterceptTest{
-    
+
     @Intercept
     public static void receive(TestPage page){
-        if(AppUtils.isHuaweiChannel()){
-            Intent intent = StitcherHelper.pack(page);
+        if (AppUtils.isHuaweiChannel()) {
+            Intent intent = Stitch.pack(page);
             intent.setClass(page.context, TestActivityA.class);
             page.context.startActivity(intent);
         } else {
-            Intent intent = StitcherHelper.pack(page);
+            Intent intent = Stitch.pack(page);
             intent.setClass(page.context, TestActivity.class);
             page.context.startActivity(intent);
         }
     }
 }
 ```
+## 数据交互
 
 ### @Service
 ```@Service```注解用于向stitch中注入Module对外公开的实现接口。
-
 
 ```java
 // 1.在 Router 中创建 ITestService.java
@@ -181,19 +191,92 @@ public class TestServiceImp implements ITestService {
 // 3. 在 ModuleB 中使用该接口
 public class TestServiceTest {
     public void test() {
-        ITestService testService = StitcherHelper.searchService(ITestService.class);
+        ITestService testService = Stitch.searchService(ITestService.class);
         //如果组件没有引用（未打包到apk中）时，testService为null
         String testText =  testService == null ? "" : testService.getTestText();
     }
 }
 
 ```
-欢迎大家star 或提交pr
 
+## 高级功能
+在不同module想要调用其他module对外公开的页面，就需要知道有哪些页面被公开或公开的页面叫什么名称。同样的，想要调用其他module对外公开的接口，也需要知道接口是什么以及在哪个service中。为解决这个问题，stitch提供了整合ActivityPage及Service的功能。
 
-组件化脚本优化配置：[Android组件化：build.gradle配置](https://www.jianshu.com/p/9620a40c203f)
+### 在module中添加依赖
+```
+    implementation 'bamboo.components.stitch:stitch-router-anno:1.2'
+    annotationProcessor 'bamboo.components.stitch:stitch-router-compiler:1.2'
+```
 
-组件化基本概念：[Android组件化开发框架](https://www.jianshu.com/p/3ed9f4c87990)
+#### 打包整合ActivityPage
 
+将所有的ActivityPage统合到ActivityPageManager中，我们只需要通过ActivityPageManager就可以知道有哪些页面是全局可见的。
+```
+@Wrapper
+public class TestPageA extends ActivityPage {
+    @Parameter
+    public Strint text;
 
-详细示例请看源码示例。
+    private String param;
+
+    public TestPageA(Context context) {
+        super(context);
+    }
+
+    @Parameter("param")
+    public void setParam(String param){
+        this.param = param;
+    }
+}
+
+@Wrapper
+public class TestPageB extends ActivityPage {
+    public TestPageB(Context context,String text) {
+        super(context);
+        this.text = text;
+    }
+}
+
+//使用时通过ActivityPageManager访问
+ActivityPageManager.newTestPageA(context).setText("test text").setParam("param test").setRequestCode(1000).startForResult();
+ActivityPageManager.newTestPageB(context,"test text").start();
+```
+#### 打包整合接口方法
+
+将所有Service实现的接口方法统合ServiceManager中，可跳过Class层直接调用到方法。
+```
+@Wrapper
+public interface ITestService {
+    
+    String getTestText();
+
+    //容易混淆或重名的方法，用@Alias指定别名
+    @Alias("getTestServiceName")
+    String getName();
+}
+
+@Wrapper
+public interface ITestService2 {
+    //容易混淆或重名的方法，用@Alias指定别名
+    @Alias("getTestService2Name")
+    String getName();
+}
+//调用时通过ServiceManager直接访问方法
+String text = ServiceManager.getTestText();
+String testName = ServiceManager.getTestServiceName();
+String testName2 = ServiceManager.getTestService2Name();
+
+//设定默认值，如果接口没有实现或者实现的module没有被打包到Apk，接口会返回默认值
+//原始数据类型默认值是其数据值的最小值，boolean默认值为false，其他引用类型为null，如果要覆盖这个设定可以通过以下方式
+String defaultText = "defaultText";
+//如果getTestText没有实现，会返回defaultText
+String text = ServiceManager.getTestText(defaultText);
+```
+
+## 技术交流
+
+*    ![stitch技术交流群](https://raw.githubusercontent.com/bambootang/stitch/master/sample/stitch-group.png)
+
+**stitch还很年轻**
+
+**欢迎大家star 或提交pr**
