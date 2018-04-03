@@ -203,7 +203,7 @@ public class TestServiceTest {
 在不同module想要调用其他module对外公开的页面，就需要知道有哪些页面被公开或公开的页面叫什么名称。同样的，想要调用其他module对外公开的接口，也需要知道接口是什么以及在哪个service中。为解决这个问题，stitch提供了整合ActivityPage及Service的功能。
 
 ### 在module中添加依赖
-```
+```groovy
     implementation 'bamboo.components.stitch:stitch-router-anno:1.2'
     annotationProcessor 'bamboo.components.stitch:stitch-router-compiler:1.2'
 ```
@@ -211,7 +211,7 @@ public class TestServiceTest {
 #### 打包整合ActivityPage
 
 将所有的ActivityPage统合到ActivityPageManager中，我们只需要通过ActivityPageManager就可以知道有哪些页面是全局可见的。
-```
+```java
 @Wrapper
 public class TestPageA extends ActivityPage {
     @Parameter
@@ -244,7 +244,7 @@ ActivityPageManager.newTestPageB(context,"test text").start();
 #### 打包整合接口方法
 
 将所有Service实现的接口方法统合ServiceManager中，可跳过Class层直接调用到方法。
-```
+```java
 @Wrapper
 public interface ITestService {
     
