@@ -1,7 +1,7 @@
 # stitch
 Android组件化开发框架
 
-**stitch**的目标是：简化组件化开发时的module交互时的沟通成本，让开发更容易做正确的事情。
+**stitch**的目标是：简化不同module进行交互时的沟通成本，让开发人员更容易做正确的事情。
 
 ## 功能支持
 0. 不同module都能接收Application的onCreate等生命周期回调进行本module的初始化
