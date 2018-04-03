@@ -202,7 +202,7 @@ public class TestServiceTest {
 ## 高级功能
 在不同module想要调用其他module对外公开的页面，就需要知道有哪些页面被公开或公开的页面叫什么名称。同样的，想要调用其他module对外公开的接口，也需要知道接口是什么以及在哪个service中。为解决这个问题，stitch提供了整合ActivityPage及Service的功能。
 
-### 在module中添加依赖
+### 在Router Module中添加依赖
 ```groovy
     implementation 'bamboo.components.stitch:stitch-router-anno:1.2'
     annotationProcessor 'bamboo.components.stitch:stitch-router-compiler:1.2'
