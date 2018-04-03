@@ -6,8 +6,8 @@ import android.support.annotation.Nullable;
 import android.widget.TextView;
 
 import bamboo.component.stitch.anno.Exported;
+import bamboo.component.testrouter.ServiceManager;
 import bamboo.sample.account.R;
-import bamboo.sample.account.component.ComponentInput;
 import bamboo.sample.account.models.AccountRepository;
 import bamboo.sample.accountrouter.AccountInfoPage;
 
@@ -33,7 +33,7 @@ public class AccountInfoActivity extends Activity {
         mTaskSizeTextView = findViewById(R.id.tv_tasks_size);
 
         mUserTextView.setText("userName: " + AccountRepository.getUserName());
-        mTaskSizeTextView.setText("taskCount: " + ComponentInput.get().getTaskCount());
+        mTaskSizeTextView.setText("taskCount: " + ServiceManager.getTaskCount());
 
     }
 }

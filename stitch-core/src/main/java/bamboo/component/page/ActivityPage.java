@@ -6,6 +6,8 @@ import android.content.Intent;
 
 import java.io.Serializable;
 
+import bamboo.component.StitcherHelper;
+
 /**
  * 每一个对其他module公开的Activity都需要有一个与之对应的ActivityPage
  * <p>
@@ -40,16 +42,29 @@ public abstract class ActivityPage implements Serializable {
         return targetIntent;
     }
 
-    public void setTargetIntent(Intent targetIntent) {
+    public ActivityPage setTargetIntent(Intent targetIntent) {
         this.targetIntent = targetIntent;
+        return this;
     }
 
-    public void setRequestCode(int requestCode) {
+    public ActivityPage setRequestCode(int requestCode) {
         this.requestCode = requestCode;
+        return this;
     }
 
     public int getRequestCode() {
         return this.requestCode;
     }
 
+    public Intent pack() {
+        return StitcherHelper.pack(this);
+    }
+
+    public void start() {
+        StitcherHelper.start(this);
+    }
+
+    public void startForResult() {
+        StitcherHelper.startActivityForResult(this, this.getRequestCode());
+    }
 }

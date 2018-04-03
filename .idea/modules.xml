@@ -4,6 +4,7 @@
     <modules>
       <module fileurl="file://$PROJECT_DIR$/Stitcher.iml" filepath="$PROJECT_DIR$/Stitcher.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/app/app.iml" filepath="$PROJECT_DIR$/sample/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/compiler-test/compiler-test.iml" filepath="$PROJECT_DIR$/compiler-test/compiler-test.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/component-account/component-account.iml" filepath="$PROJECT_DIR$/sample/component-account/component-account.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/component-tasks/component-tasks.iml" filepath="$PROJECT_DIR$/sample/component-tasks/component-tasks.iml" />
       <module fileurl="file://$PROJECT_DIR$/sample/router/router.iml" filepath="$PROJECT_DIR$/sample/router/router.iml" />
@@ -12,6 +13,8 @@
       <module fileurl="file://$PROJECT_DIR$/stitch-compiler/stitch-compiler.iml" filepath="$PROJECT_DIR$/stitch-compiler/stitch-compiler.iml" />
       <module fileurl="file://$PROJECT_DIR$/stitch-core/stitch-core.iml" filepath="$PROJECT_DIR$/stitch-core/stitch-core.iml" />
       <module fileurl="file://$PROJECT_DIR$/stitch-gradle-plugin/stitch-gradle-plugin.iml" filepath="$PROJECT_DIR$/stitch-gradle-plugin/stitch-gradle-plugin.iml" />
+      <module fileurl="file://$PROJECT_DIR$/stitch-router-anno/stitch-router-anno.iml" filepath="$PROJECT_DIR$/stitch-router-anno/stitch-router-anno.iml" />
+      <module fileurl="file://$PROJECT_DIR$/stitch-router-compiler/stitch-router-compiler.iml" filepath="$PROJECT_DIR$/stitch-router-compiler/stitch-router-compiler.iml" />
     </modules>
   </component>
 </project>
