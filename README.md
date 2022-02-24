@@ -275,11 +275,3 @@ String defaultText = "defaultText";
 //如果getTestText没有实现，会返回defaultText
 String text = ServiceManager.getTestText(defaultText);
 ```
-
-## 技术交流
-
-*    ![stitch技术交流群](https://raw.githubusercontent.com/bambootang/stitch/master/sample/stitch-group.png)
-
-**stitch还很年轻**
-
-**欢迎大家star 或提交pr**
